@@ -53,11 +53,19 @@ options:
 ```
 
 ```bash
+pl_itn -t "jest za pięć druga"
+jest 01:55
 
+pl_itn -t "drugi listopada dwa tysiące osiemnastego roku"
+2 listopada 2018 roku
 ```
 
 ### Python
 ```python
+>>> from pl_itn import Normalizer
+>>> normalizer = Normalizer()
+>>> normalizer.normalize("za pięć dwunasta")
+'11:55'
 ```
 
 

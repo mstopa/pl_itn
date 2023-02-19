@@ -22,6 +22,7 @@ setup(
     url="https://github.com/mstopa/pl_itn",
     packages=find_packages(),
     include_package_data=True,
+    package_data={"pl_itn.grammars": ["*.fst"]},
     install_requires=install_requires,
     entry_points={"console_scripts": ["pl_itn = pl_itn.__main__:main"]},
 )

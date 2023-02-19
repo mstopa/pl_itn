@@ -11,20 +11,21 @@ from pl_itn.src.restore_uppercase import UppercaseRestorer
 
 logger = logging.getLogger(__name__)
 
+package_root = Path(__file__).parents[1]
 
 class Normalizer:
     def __init__(self,
-                 tagger_fst_path: Path,
-                 verbalizer_fst_path: Path,
+                 tagger_fst_path: Path = package_root / "grammars/tagger.fst",
+                 verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
                  debug_mode: bool = False
                  ):
-        # thread safe objects
+        # Thread safe objects
         self.tagger = Tagger(tagger_fst_path)
         self.parser = TokenParser()
         self.verbalizer = Verbalizer(verbalizer_fst_path)
         self.debug_mode = debug_mode
 
-        # objects to initialize in self.normalize() per session due to race conditions:
+        # Objects to initialize in self.normalize() per session due to race conditions:
         # Permuter, UppercaseRestorer
 
     def normalize(self, text: str) -> str:
@@ -45,7 +46,8 @@ class Normalizer:
             verbalized_text = self.verbalizer.verbalize(tags_reordered)
             postprocessed_text = self.post_process(verbalized_text)
             uppercase_restored = UppercaseRestorer(text, postprocessed_text).run()
-            whitespaces_restored = WhitespaceRestorer(text, uppercase_restored, tokens).run()    
+            whitespaces_restored = WhitespaceRestorer(text, uppercase_restored, tokens).run()
+            return whitespaces_restored 
         
         except ValueError:
             if self.debug_mode:
@@ -53,9 +55,6 @@ class Normalizer:
             else:
                 return text
        
-        else:
-            return whitespaces_restored
-
     def pre_process(self, text: str):
         text = text.lower()
         
@@ -71,5 +70,4 @@ class Normalizer:
     def post_process(self, text):
         text = re.sub(r' +', ' ', text)
         text = text.strip()
-        logger.debug(f"post_process(): {text}")
         return text

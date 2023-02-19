@@ -4,7 +4,7 @@ from signal import signal, SIGINT, SIGTERM
 
 import yaml
 
-from pl_itn import Normalizer
+from pl_itn import Normalizer, package_root
 from pl_itn.logging import ITN_logger
 from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
 from pl_itn.VERSION import __version__
@@ -44,8 +44,8 @@ def parser():
     input_args.add_argument('-i', '--interactive', action='store_true',
                         help='If used, demo will process phrases from stdin interactively.')
     
-    parser.add_argument('--tagger', type=Path, default="grammars/tagger.fst")
-    parser.add_argument('--verbalizer', type=Path, default="grammars/verbalizer.fst")
+    parser.add_argument('--tagger', type=Path, default=(package_root / "grammars/tagger.fst"))
+    parser.add_argument('--verbalizer', type=Path, default=(package_root / "grammars/verbalizer.fst"))
     parser.add_argument('--config', type=Path, help="Optionally provide yaml config with tagger and verbalizer paths.")
 
     parser.add_argument('--log_level', choices=['debug', 'info'], default='info')
