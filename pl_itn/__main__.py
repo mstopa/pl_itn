@@ -10,6 +10,31 @@ from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
 from pl_itn.VERSION import __version__
 
 
+def main():
+    args = parser()
+    
+    itn_logger = ITN_logger("pl_itn")
+    itn_logger.set_level(args.log_level)
+    logger = itn_logger.logger
+    
+    logger.debug(f"Inverse Text Normalization {__version__}")
+
+    if args.config:
+        with args.config.open() as f:
+            config = yaml.safe_load(f)
+        args.tagger = Path(config.get('out_dir')) / config.get('tagger_fname')
+        args.verbalizer = Path(config.get('out_dir')) / config.get('verbalizer_fname')
+        
+    normalizer = Normalizer(
+        tagger_fst_path=args.tagger, 
+        verbalizer_fst_path=args.verbalizer,
+        debug_mode=args.debug_mode)
+
+    if args.interactive:
+        run_interactive(normalizer)
+    else:
+        run_single(normalizer, args.text)
+
 def parser():
     parser = argparse.ArgumentParser(
         description='Inverse Text Normalization based on Finite State Transducers')
@@ -45,30 +70,8 @@ def run_interactive(normalizer: Normalizer):
             break
 
 def run_single(normalizer: Normalizer, text: str) -> None:
-    print(normalizer.normalize(args.text))
+    print(normalizer.normalize(text))
 
 
 if __name__ == "__main__":
-    args = parser()
-    
-    itn_logger = ITN_logger("pl_itn")
-    itn_logger.set_level(args.log_level)
-    logger = itn_logger.logger
-    
-    logger.debug(f"Inverse Text Normalization {__version__}")
-
-    if args.config:
-        with args.config.open() as f:
-            config = yaml.safe_load(f)
-        args.tagger = Path(config.get('out_dir')) / config.get('tagger_fname')
-        args.verbalizer = Path(config.get('out_dir')) / config.get('verbalizer_fname')
-        
-    normalizer = Normalizer(
-        tagger_fst_path=args.tagger, 
-        verbalizer_fst_path=args.verbalizer,
-        debug_mode=args.debug_mode)
-
-    if args.interactive:
-        run_interactive(normalizer)
-    else:
-        run_single(normalizer, args.text)
+    main()
