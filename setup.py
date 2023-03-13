@@ -24,5 +24,6 @@ setup(
     include_package_data=True,
     package_data={"pl_itn.grammars": ["*.fst"]},
     install_requires=install_requires,
+    setup_requires=["wheel"],
     entry_points={"console_scripts": ["pl_itn = pl_itn.__main__:main"]},
 )

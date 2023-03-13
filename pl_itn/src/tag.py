@@ -1,23 +1,13 @@
-import logging
 import pynini
 
-logger = logging.getLogger(__name__)
 
+def tag(tagger_fst, text):
+    text = pynini.escape(text)
 
-class Tagger():
-    def __init__(self, fst_path):
-        self.fst_tagger = pynini.Fst.read(str(fst_path))
+    lattice = text @ tagger_fst
 
-    def tag(self, text):
-        text = pynini.escape(text)
-        text = self.tag_with_fst(text)
-        logger.debug(text)
+    text = pynini.shortestpath(lattice, nshortest=1, unique=True).string()
 
-        if text is None:
-            logger.error("Tagger returned no output.")
-            raise ValueError()
-        return text
-
-    def tag_with_fst(self, text):
-        lattice = text @ self.fst_tagger
-        return pynini.shortestpath(lattice, nshortest=1, unique=True).string()
+    if text is None:
+        raise ValueError("Tagger returned no output.")
+    return text
