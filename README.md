@@ -37,11 +37,9 @@ pip install pl_itn
 pip install .
 ```
 
+### Editable install for development
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate | source .venv/Scripts/activate
-pip install wheel
-pip install .
+pip install -e .[dev]
 ```
 
 ## Usage

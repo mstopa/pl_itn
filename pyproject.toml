@@ -22,7 +22,7 @@ keywords = ["fst", "itn", "text normalization"]
 Repository = "https://github.com/mstopa/pl_itn"
 
 [project.optional-dependencies]
-tests = [
+dev = [
     "coverage>=5.0.3",
     "pytest>=6.0.2",
 ]
