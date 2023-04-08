@@ -1,0 +1,40 @@
+[tool.pdm]
+# PEP 621 project metadata
+# See https://www.python.org/dev/peps/pep-0621/
+[project]
+name = "pl_itn"
+description = "FST Inverse Text Normalization library"
+authors = [
+    {name = "mstopa"},
+    {name = "cansubmarinesswim"}
+]
+version = "0.1.0"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+dependencies = [
+    "pynini>=2.1.4",
+    "pyyaml>=6.0"
+]
+readme = "README.md"
+keywords = ["fst", "itn", "text normalization"]
+
+[project.urls]
+Repository = "https://github.com/mstopa/pl_itn"
+
+[project.optional-dependencies]
+tests = [
+    "coverage>=5.0.3",
+    "pytest>=6.0.2",
+]
+
+[project.scripts]
+pl_itn = "pl_itn.__main__:main"
+
+[tool.pdm.build]
+excludes = ["./**/.git"]
+includes = ["pl_itn"]
+source-includes = ["CHANGELOG.md", "LICENSE", "README.md"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

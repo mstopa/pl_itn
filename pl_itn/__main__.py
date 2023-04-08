@@ -7,7 +7,6 @@ import yaml
 from pl_itn import Normalizer, package_root
 from pl_itn.logging import ITN_logger
 from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
-from pl_itn.VERSION import __version__
 
 
 def main():
@@ -15,9 +14,6 @@ def main():
 
     itn_logger = ITN_logger("pl_itn")
     itn_logger.set_level(args.log_level)
-    logger = itn_logger.logger
-
-    logger.debug(f"Inverse Text Normalization {__version__}")
 
     if args.config:
         with args.config.open() as f:
