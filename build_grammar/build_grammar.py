@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 import yaml
 
-# from tagger.tag import TagFst
+from tagger.tag import TagFst
 from verbalizer.verbalize import VerbalizeFst
 
 
@@ -15,8 +15,8 @@ def main(config_path: Path, tagger_path: Path, verbalizer_path: Path):
     tagger_path.parent.mkdir(parents=True, exist_ok=True)
     verbalizer_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # graph = TagFst(config)
-    # graph.write_to_fst(str(tagger_path))
+    graph = TagFst(config)
+    graph.write_to_fst(str(tagger_path))
 
     graph = VerbalizeFst(config)
     graph.write_to_fst(str(verbalizer_path))

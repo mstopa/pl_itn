@@ -17,5 +17,6 @@ class GraphFst:
 char_fst = pynini_utf8.VALID_UTF8_CHAR
 not_quote_fst = pynini.difference(char_fst, r'"')
 
-# whitespace_fst = pynini.union(" ", "\t", "\n", "\r", u"\u00A0")
-# surely_delete_space_fst = pynutil.delete(pynini.closure(whitespace_fst, 1))
+whitespace_fst = pynini.union(" ", "\t", "\n", "\r", u"\u00A0")
+not_whitespace_fst = pynini.difference(char_fst, whitespace_fst)
+surely_delete_space_fst = pynutil.delete(pynini.closure(whitespace_fst, 1))
