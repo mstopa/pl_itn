@@ -1,5 +1,5 @@
-from collections import OrderedDict
 import re
+from collections import OrderedDict
 from typing import List
 
 """
@@ -41,8 +41,8 @@ def _parse_final_leaf(text):
     if len(keywords) != len(values):
         raise ValueError("Parsing tagged text into tokens failed.")
 
-    for index, keyword in enumerate(keywords):
-        yield ((keyword, values[index]))
+    for index, keyword in enumerate(keywords):  # for keyword, value in zip(keywords, values) ? Albo nawet yield from zip(...)
+        yield ((keyword, values[index]))  # na pewno chcemy krotkę z krotką? Nie można `yeild keyword, values[index]`?
 
 
 def _parse_recursively(text):

@@ -10,12 +10,12 @@ def pre_process(text: str):
         text = text.replace(punct, f" {punct} ")
 
     # Remove multiple spaces
-    text = re.sub(r" +", " ", text)
+    text = re.sub(r" +", " ", text)  # może r"\s+" ?
     text = text.strip()
     return text
 
 
 def post_process(text: str):
-    text = re.sub(r" +", " ", text)
+    text = re.sub(r" +", " ", text)  # deja vu
     text = text.strip()
     return text

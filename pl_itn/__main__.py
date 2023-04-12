@@ -1,13 +1,12 @@
 import argparse
+import yaml
 from pathlib import Path
 from signal import signal, SIGINT, SIGTERM
 
-import yaml
-
 from pl_itn import Normalizer, package_root
-from pl_itn.logging import ITN_logger
-from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
 from pl_itn.VERSION import __version__
+from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
+from pl_itn.logging import ITN_logger
 
 
 def main():
@@ -20,8 +19,8 @@ def main():
     logger.debug(f"Inverse Text Normalization {__version__}")
 
     if args.config:
-        with args.config.open() as f:
-            config = yaml.safe_load(f)
+        with args.config.open() as config_file:
+            config = yaml.safe_load(config_file)
         args.tagger = Path(config.get("out_dir")) / config.get("tagger_fname")
         args.verbalizer = Path(config.get("out_dir")) / config.get("verbalizer_fname")
 

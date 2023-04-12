@@ -61,9 +61,9 @@ def restore_whitespaces(original: str, normalized: str, tokens: List[Dict]) -> s
                 return ""
 
             word_with_spaces = (
-                maybe_get_whitespace(original, index_original - 1)
-                + original[index_original]
-                + maybe_get_whitespace(original, index_original + 1)
+                    maybe_get_whitespace(original, index_original - 1)
+                    + original[index_original]
+                    + maybe_get_whitespace(original, index_original + 1)
             )
             restored += word_with_spaces
 
@@ -74,8 +74,8 @@ def restore_whitespaces(original: str, normalized: str, tokens: List[Dict]) -> s
             # Remove processed input
             def slice_head(input_list, index):
                 try:
-                    output_list = input_list[index + 1 :]
-                except IndexError:
+                    output_list = input_list[index + 1:]
+                except IndexError:  # slice'y nie rzucają IndexError
                     output_list = []
                 return output_list
 
