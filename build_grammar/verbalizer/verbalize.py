@@ -4,6 +4,7 @@ from common.graph import GraphFst
 from common.class_labels import lstrip_class_label, rstrip_class_label
 
 from verbalizer.graphs.cardinal import CardinalFst
+from verbalizer.graphs.ordinal import OrdinalFst
 from verbalizer.graphs.idle import IdleFst
 from verbalizer.graphs.whitelist import WhitelistFst
 
@@ -17,13 +18,13 @@ class VerbalizeFst(GraphFst):
         self.config = config
         
         cardinal = CardinalFst()
-        # ordinal = OrdinalFst()
+        ordinal = OrdinalFst()
         whitelist = WhitelistFst()
         idle = IdleFst()
 
         graph = (
             cardinal.fst
-            # | ordinal.fst
+            | ordinal.fst
             | whitelist.fst
             | idle.fst
         )
