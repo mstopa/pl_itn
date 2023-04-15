@@ -6,6 +6,7 @@ from common.class_labels import add_left_class_label, add_right_class_label
 
 from tagger.graphs.idle import IdleFst
 from tagger.graphs.manual import ManualFst
+from tagger.graphs.cardinal_basic import CardinalBasicFst
 # from tagger.graphs.cardinal import CardinalFst
 # from tagger.graphs.ordinal import OrdinalFst
 
@@ -25,8 +26,8 @@ class TagFst(GraphFst):
         # ignored in other transformations
         manual = ManualFst()
         
-        # # ["jeden", "dwa", "trzy", "sto piętnaście", ...]
-        # cardinal_basic_forms = CardinalBasicFst()
+        # ["jeden", "dwa", "trzy", "sto piętnaście", ...]
+        cardinal_basic_forms = CardinalBasicFst()
         
         # # ["jedno", "jednych", "dwiema", "trzech", "stoma", ...]
         # cardinal_declined = CardinalDeclinedFst(cardinal_basic_forms)
@@ -39,11 +40,11 @@ class TagFst(GraphFst):
             | pynutil.add_weight(manual.fst, 1.01)
         )
         
-        # if maybe_fetch(config, "cardinals_basic_forms"):
-        #     graph |= pynutil.add_weight(cardinal_basic_forms.fst, 1.1)
-        # if maybe_fetch(config, "cardinals_declined"):
+        if config.get("cardinals_basic_forms"):
+            graph |= pynutil.add_weight(cardinal_basic_forms.fst, 1.1)
+        # if config.get("cardinals_declined"):
         #     graph |= pynutil.add_weight(cardinal_declined_graph.fst, 1.1)
-        # if maybe_fetch(config, "ordinals"):
+        # if config.get("ordinals"):
         #     graph |= pynutil.add_weight(ordinal_graph.fst, 1.1)
 
         transformation = (
@@ -51,9 +52,6 @@ class TagFst(GraphFst):
             + graph
             + add_right_class_label()
         )
-
-        # # special, universal graph for punctuation marks
-        # punctuation = PunctuationFst()
 
         transformations = transformation + pynini.closure(accept_space_fst + transformation)
 
