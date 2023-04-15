@@ -1,6 +1,6 @@
 import pynini
 
-from common.graph import GraphFst, not_quote_fst
+from common.graph import GraphFst, not_quote_fst, surely_delete_space_fst
 from common.rule_labels import lstrip_rule_label, rstrip_rule_label
 from common.class_labels import lstrip_class_label, rstrip_class_label
 
@@ -16,6 +16,7 @@ class CardinalFst(GraphFst):
                 lstrip_rule_label("negative")
                 + not_quote_fst
                 + rstrip_rule_label()
+                + surely_delete_space_fst
             ),
             0, 1
         )

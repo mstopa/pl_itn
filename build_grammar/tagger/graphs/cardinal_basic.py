@@ -1,26 +1,55 @@
 import pynini
 from pynini.lib import pynutil
 
-from common.graph import GraphFst
+from common.graph import GraphFst, maybe_delete_space_fst, surely_delete_space_fst, accept_space_fst, digit_fst
 from common.rule_labels import add_left_rule_label, add_right_rule_label
 from common.class_labels import add_left_class_label, add_right_class_label
+
+from tagger.graphs.sign import SignFst
 
 
 class CardinalBasicFst(GraphFst):
     def __init__(self):
         zero_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/zero.tsv")
-        digit_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/digit.tsv")
-        ties_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/ties.tsv")
+        unit_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/digit.tsv")
         teen_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/teen.tsv")
+        ties_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/ties.tsv")
         hundred_fst = pynini.string_file("build_grammar/tagger/data/cardinal_basic/hundred.tsv")
 
-        graph = zero_fst
+        up_to_thousand_fst = UpToThousandFst(unit_fst, teen_fst, ties_fst, hundred_fst).fst
+        
+        above_thousand_fst = AboveThousandFst("tysiąc", "tysiące", "tysięcy", up_to_thousand_fst).fst
+        above_million_fst = AboveThousandFst("milion", "miliony", "milionów", up_to_thousand_fst).fst
+        above_billion_fst = AboveThousandFst("miliard", "miliardy", "miliardów", up_to_thousand_fst).fst
+
+        graph = (
+            above_billion_fst
+            + maybe_delete_space_fst
+            + above_million_fst
+            + maybe_delete_space_fst
+            + above_thousand_fst
+            + maybe_delete_space_fst
+            + up_to_thousand_fst
+        )
+
+        remove_leading_zeros_fst = (
+            pynutil.delete(pynini.closure("0"))
+            + pynini.closure(pynini.difference(digit_fst, "0"), 1)
+            + pynini.closure(digit_fst)
+        )
+        graph @= remove_leading_zeros_fst
+
+        graph |= zero_fst
 
         transformation = (
             add_left_rule_label("integer")
             + graph
             + add_right_rule_label()
         )
+
+        sign_fst = SignFst().fst
+
+        transformation = pynini.closure(sign_fst + accept_space_fst, 0, 1) + transformation
 
         transformation = (
             add_left_class_label("cardinal")
@@ -30,151 +59,61 @@ class CardinalBasicFst(GraphFst):
 
         self._fst = transformation.optimize()
 
-    #     graph_hundred_and_below_component = self.compose_hundred_and_below_component()
-    #     graph_hundred_and_below_component_at_least_one_none_zero_digit = (
-    #         self.compose_hundred_and_below_component_at_least_one_none_zero_digit()
-    #     )
-    #     # shortcut attribute to be used in helper methods called below
-    #     self.nonzero_hundred = graph_hundred_and_below_component_at_least_one_none_zero_digit.optimize()
 
-    #     graph_thousand_component = self.compose_thousand_component()
-    #     graph_million_component = self.compose_million_component()
-    #     graph_billion_component = self.compose_billion_component()
+class UpToThousandFst(GraphFst):
+    def __init__(self, unit_fst, teen_fst, ties_fst, hundred_fst) -> None:
+        """
+        Possible options:
+        001 <- [hundred: 0][ties: 0 teens: 0][units: True]
+        011 <- [hundred: 0][ties: 0 teens: True][units: 0]
+        021 <- [hundred: 0][ties: True teens: 0][units: 1]
+        101 <- [hundred: True][ties: 0 teens: 0][units: True]
+        111 <- [hundred: True][ties: 0 teens: True][units: 0]
+        121 <- [hundred: True][ties: True teens: 0][units: True]
+        """
+        accept_hundreds_or_insert_zero_fst = pynini.union(hundred_fst, pynutil.insert("0"))
+        accept_ties_or_insert_zero_fst = pynini.union(ties_fst, pynutil.insert("0"))
+        accept_teens_or_insert_zero_fst = pynini.union(teen_fst, pynutil.insert("00"))
+        accept_units_or_insert_zero_fst = pynini.union(unit_fst, pynutil.insert("0"))
 
-    #     graph_remove_leading_zeros = (
-    #         pynutil.delete(pynini.closure("0"))
-    #         + pynini.difference(DIGIT, "0")
-    #         + pynini.closure(DIGIT)
-    #     )
+        accept_ties_and_units_fst = accept_ties_or_insert_zero_fst + maybe_delete_space_fst + accept_units_or_insert_zero_fst
+        accept_either_teens_or_ties_and_units_fst = pynini.union(accept_teens_or_insert_zero_fst, accept_ties_and_units_fst)
 
-    #     graph = (
-    #         graph_billion_component  # leading 0 or billion conversion if detected
-    #         + delete_space
-    #         + graph_million_component  # leading 0 or million conversion if detected
-    #         + delete_space
-    #         + graph_thousand_component  # leading 0 or thousand conversion if detected
-    #         + delete_space
-    #         + graph_hundred_and_below_component  # leading 0 or hundred and anything below
-    #         # conversion if detected
-    #     ) @ graph_remove_leading_zeros
+        graph = accept_hundreds_or_insert_zero_fst + maybe_delete_space_fst + accept_either_teens_or_ties_and_units_fst
 
-    #     graph |= self.graph_zero
-    #     self.graph = graph  # to be used by other classes
-    #     labeled_graph = add_rule_label(graph, "integer")
+        self._fst = graph.optimize()
+        
 
-    #     optional_minus_graph = self.compose_optional_minus_graph()
+class AboveThousandFst(GraphFst):
+    def __init__(self, sg_nominative_complement: str, pl_nominative_complement, pl_genitive_complement: str, up_to_thousand_fst) -> None:
+        # This graph transforms numbers above thousand, for example `sto dwadzieścia pięć tysięcy` or `trzy miliony`
+        # In order to enter this path there are two components required: a non_zero_up_to_thousand_number and the complementing part
+        # The complementing part is either sg_nominative, pl_nominative of pl_genitive depending on the number
+        non_zero_number = pynini.closure(digit_fst) + pynini.closure(pynini.difference(digit_fst, "0"), 1) + pynini.closure(digit_fst)
+        non_zero_up_to_thousand_number = up_to_thousand_fst @ non_zero_number
 
-    #     final_graph = (
-    #         optional_minus_graph
-    #         + accept_space
-    #         + labeled_graph
-    #     )
-    #     final_graph = self.add_tokens(final_graph)
+        # Numbers ended with digits 2, 3 or 4 are complemented by pl_nominatives, for example `dwa tysiące`
+        numbers_complemented_by_pl_nominative = pynini.closure(digit_fst) + pynini.union("2", "3", "4")
+        # With the exception for teens: 12, 13, 14. These are complemented by genitive, for example `dwanaście tysięcy`
+        numbers_complemented_by_pl_nominative -= pynini.union("012", "013", "014")
+        # Exclude bare zero from this path
+        numbers_complemented_by_pl_nominative -= "000"
+        number_fst = non_zero_up_to_thousand_number @ numbers_complemented_by_pl_nominative
+        pl_nominative_fst = number_fst + surely_delete_space_fst + pynutil.delete(pl_nominative_complement)
 
-    #     # other fields for other classes to use
-    #     self.fst = final_graph.optimize()
-    #     self.graph = graph.optimize()
-    #     self.graph_thousand = graph_thousand_component.optimize()
-    #     self.graph_million = graph_million_component.optimize()
-    #     self.graph_billion = graph_billion_component.optimize()
+        # Numbers ended with digits above 4 are complemented by genitive, for example `pięć tysięcy`
+        numbers_complemented_by_pl_genitive = pynini.closure(digit_fst) + pynini.union("5", "6", "7", "8", "9")
+        # Add exceptional teens which are complemented by genitive, for example `dwanaście tysięcy`
+        numbers_complemented_by_pl_genitive += pynini.union("011", "012", "013", "014")
+        number_fst = non_zero_up_to_thousand_number @ numbers_complemented_by_pl_genitive
+        pl_genitive_fst = number_fst + surely_delete_space_fst + pynutil.delete(pl_genitive_complement)
 
-    # def compose_optional_minus_graph(self):
-    #     graph = pynini.cross("minus", "\"-\"")
-    #     labeled_graph = pynutil.insert("negative: ") + graph
-    #     optional_labeled_graph = pynini.closure(
-    #         labeled_graph,
-    #         0, 1
-    #     )
-    #     return optional_labeled_graph
+        # But it is also possible to skip the numeral, for example 'tysiąc' -> 1000
+        sg_nominative_fst = pynini.cross(sg_nominative_complement, "001")
 
-    # def compose_hundred_and_below_component(self):
-    #     """
-    #     Possible options:
-    #     001 <- [hundred: 0][ties: 0 teens: 0][units: 1]
-    #     011 <- [hundred: 0][ties: 0 teens: 1][units: 0]
-    #     021 <- [hundred: 0][ties: 1 teens: 0][units: 1]
-    #     101 <- [hundred: 1][ties: 0 teens: 0][units: 1]
-    #     111 <- [hundred: 1][ties: 0 teens: 1][units: 0]
-    #     121 <- [hundred: 1][ties: 1 teens: 0][units: 1]
-    #     """
-    #     graph = pynini.union(
-    #         self.graph_hundred,
-    #         pynutil.insert("0")
-    #     )
-
-    #     graph += delete_space
-    #     graph += pynini.union(
-    #         (self.graph_teen | pynutil.insert("00")),
-    #         (self.graph_ties | pynutil.insert("0")) +
-    #         delete_space + (self.graph_digit | pynutil.insert("0"))
-    #     )
-    #     return graph
-
-    # def compose_hundred_and_below_component_at_least_one_none_zero_digit(self):
-    #     hundred_component = self.compose_hundred_and_below_component()
-    #     graph_at_least_one_none_zero_digit = (
-    #         pynini.closure(DIGIT)
-    #         + (pynini.union(DIGIT) - "0")
-    #         + pynini.closure(DIGIT)
-    #     )
-    #     return (
-    #         hundred_component
-    #         @ graph_at_least_one_none_zero_digit
-    #     )
-
-    # def compose_complex_component(self, single_unit_complement, nominative_complement, genitive_complement):
-    #     # Single unit, for example `tysiąc`
-    #     nonzero_hundred_single_unit = '001'
-    #     graph_single_unit = pynini.cross(single_unit_complement, nonzero_hundred_single_unit)
-
-    #     # Numerals ended with digits 2, 3 or 4 are complemented by nominatives, for example `dwa tysiące`
-    #     numbers_complemented_by_nominative = (
-    #         pynini.closure(DIGIT) + pynini.union("2", "3", "4")
-    #     )
-    #     # teens are always complemented by genitive
-    #     numbers_complemented_by_nominative -= (
-    #         pynini.closure(DIGIT) + "1" + DIGIT)
-
-    #     nonzero_hundred_complemented_by_nominative = self.nonzero_hundred @ numbers_complemented_by_nominative
-    #     graph_complemented_by_nominative = (
-    #         nonzero_hundred_complemented_by_nominative
-    #         + delete_space
-    #         + pynutil.delete(nominative_complement)
-    #     )
-
-    #     # Numerals ended with digits above 4 are complemented by genitive, for example `pięć tysięcy`
-    #     numbers_complemented_by_genitive = (
-    #         pynini.closure(DIGIT)
-    #         - pynini.union(
-    #             nonzero_hundred_single_unit,
-    #             numbers_complemented_by_nominative
-    #         )
-    #     )
-    #     nonzero_hundred_complemented_by_genitive = self.nonzero_hundred @ numbers_complemented_by_genitive
-    #     graph_complemented_by_genitive = (
-    #         nonzero_hundred_complemented_by_genitive
-    #         + delete_space
-    #         + pynutil.delete(genitive_complement)
-    #     )
-
-    #     return pynini.union(
-    #         graph_single_unit,
-    #         graph_complemented_by_nominative,
-    #         graph_complemented_by_genitive,
-    #         pynutil.insert("000")
-    #     )
-
-    # def compose_thousand_component(self):
-    #     return self.compose_complex_component(
-    #         "tysiąc", "tysiące", "tysięcy"
-    #     )
-
-    # def compose_million_component(self):
-    #     return self.compose_complex_component(
-    #         "milion", "miliony", "milionów"
-    #     )
-
-    # def compose_billion_component(self):
-    #     return self.compose_complex_component(
-    #         "miliard", "miliardy", "miliardów"
-    #     )
+        self._fst = pynini.union(
+            sg_nominative_fst,
+            pl_nominative_fst,
+            pl_genitive_fst,
+            pynutil.insert("000")
+        )
