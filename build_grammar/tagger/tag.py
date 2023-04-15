@@ -1,12 +1,13 @@
 import pynini
+from pynini.lib import pynutil
 
 from common.graph import GraphFst, accept_space_fst
 from common.class_labels import add_left_class_label, add_right_class_label
 
 from tagger.graphs.idle import IdleFst
+from tagger.graphs.manual import ManualFst
 # from tagger.graphs.cardinal import CardinalFst
 # from tagger.graphs.ordinal import OrdinalFst
-# from tagger.graphs.whitelist import WhitelistFst
 
 
 class TagFst(GraphFst):
@@ -20,8 +21,9 @@ class TagFst(GraphFst):
         # idle path - this graph accepts any sequence with no normalization
         idle = IdleFst()
         
-        # # user defined tokens that will never be normalized
-        # whitelist = WhitelistFst()
+        # transformations defined manually by the user
+        # ignored in other transformations
+        manual = ManualFst()
         
         # # ["jeden", "dwa", "trzy", "sto piętnaście", ...]
         # cardinal_basic_forms = CardinalBasicFst()
@@ -31,12 +33,11 @@ class TagFst(GraphFst):
         
         # # ["pierwszy", "drugi", "trzecia", "sto piąte"]
         # ordinal = OrdinalFst(cardinal_basic_forms)
-
-        graph = idle.fst        
-        # graph = (
-        #     pynutil.add_weight(idle.fst, 100)
-        #     | pynutil.add_weight(whitelist.fst, 1.01)
-        # )
+     
+        graph = (
+            pynutil.add_weight(idle.fst, 100)
+            | pynutil.add_weight(manual.fst, 1.01)
+        )
         
         # if maybe_fetch(config, "cardinals_basic_forms"):
         #     graph |= pynutil.add_weight(cardinal_basic_forms.fst, 1.1)

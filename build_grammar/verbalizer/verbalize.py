@@ -6,7 +6,7 @@ from common.class_labels import lstrip_class_label, rstrip_class_label
 from verbalizer.graphs.cardinal import CardinalFst
 from verbalizer.graphs.ordinal import OrdinalFst
 from verbalizer.graphs.idle import IdleFst
-from verbalizer.graphs.whitelist import WhitelistFst
+from verbalizer.graphs.manual import ManualFst
 
 
 class VerbalizeFst(GraphFst):
@@ -19,7 +19,7 @@ class VerbalizeFst(GraphFst):
         
         cardinal = CardinalFst()
         ordinal = OrdinalFst()
-        whitelist = WhitelistFst()
+        whitelist = ManualFst()
         idle = IdleFst()
 
         graph = (
