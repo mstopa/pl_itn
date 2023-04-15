@@ -18,7 +18,7 @@ def lstrip_class_label(label: str) -> pynini.Fst:
     Strips the label from the start of a token.
     """
     return (
-        pynutil.delete(f"{label}")
+        pynutil.delete(label)
         + pynutil.delete(" { ")
     )
 
@@ -27,5 +27,5 @@ def rstrip_class_label() -> pynini.Fst:
     Strips the label from the end of a token.
     """
     return (
-        pynutil.delete(" } ")
+        pynutil.delete(" }")
     )

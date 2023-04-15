@@ -1,6 +1,6 @@
 import pynini
 
-from common.graph import GraphFst
+from common.graph import GraphFst, accept_space_fst
 from common.class_labels import lstrip_class_label, rstrip_class_label
 
 from verbalizer.graphs.cardinal import CardinalFst
@@ -35,8 +35,6 @@ class VerbalizeFst(GraphFst):
             + rstrip_class_label()
         )
 
-        transformations = (
-            pynini.closure(transformation, 1)
-        )
+        transformations = transformation + pynini.closure(accept_space_fst + transformation)
 
         self._fst = transformations.optimize()

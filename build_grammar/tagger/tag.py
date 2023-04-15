@@ -1,6 +1,6 @@
 import pynini
 
-from common.graph import GraphFst
+from common.graph import GraphFst, accept_space_fst
 from common.class_labels import add_left_class_label, add_right_class_label
 
 from tagger.graphs.idle import IdleFst
@@ -54,8 +54,6 @@ class TagFst(GraphFst):
         # # special, universal graph for punctuation marks
         # punctuation = PunctuationFst()
 
-        transformations = (
-            pynini.closure(transformation, 1)
-        )
+        transformations = transformation + pynini.closure(accept_space_fst + transformation)
 
         self._fst = transformations.optimize()
