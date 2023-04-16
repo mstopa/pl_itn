@@ -55,7 +55,8 @@ class CardinalBasicFst(GraphFst):
 
         self._fst = transformation.optimize()
 
-        # export to reuse in cardinal_declined:
+        # export to reuse in cardinal_declined and ordinal:
+        self.hundred_fst = hundred_fst
         self.above_thousand_fst = above_thousand_fst
         self.above_million_fst = above_million_fst
         self.above_billion_fst = above_billion_fst
