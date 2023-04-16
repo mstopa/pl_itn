@@ -1,11 +1,12 @@
 import pynini
 from pynini.lib import pynutil
 
-from common.graph import GraphFst, maybe_delete_space_fst, surely_delete_space_fst, accept_space_fst, digit_fst
+from common.graph import GraphFst, maybe_delete_space_fst, surely_delete_space_fst, accept_space_fst, digit_fst, non_zero_number
 from common.rule_labels import add_left_rule_label, add_right_rule_label
 from common.class_labels import add_left_class_label, add_right_class_label
 
 from tagger.graphs.sign import SignFst
+from tagger.graphs.cardinal_common import UpToThousandFst, remove_leading_zeros_fst
 
 
 class CardinalBasicFst(GraphFst):
@@ -32,11 +33,6 @@ class CardinalBasicFst(GraphFst):
             + up_to_thousand_fst
         )
 
-        remove_leading_zeros_fst = (
-            pynutil.delete(pynini.closure("0"))
-            + pynini.closure(pynini.difference(digit_fst, "0"), 1)
-            + pynini.closure(digit_fst)
-        )
         graph @= remove_leading_zeros_fst
 
         graph |= zero_fst
@@ -59,29 +55,10 @@ class CardinalBasicFst(GraphFst):
 
         self._fst = transformation.optimize()
 
-
-class UpToThousandFst(GraphFst):
-    def __init__(self, unit_fst, teen_fst, ties_fst, hundred_fst) -> None:
-        """
-        Possible options:
-        001 <- [hundred: 0][ties: 0 teens: 0][units: True]
-        011 <- [hundred: 0][ties: 0 teens: True][units: 0]
-        021 <- [hundred: 0][ties: True teens: 0][units: 1]
-        101 <- [hundred: True][ties: 0 teens: 0][units: True]
-        111 <- [hundred: True][ties: 0 teens: True][units: 0]
-        121 <- [hundred: True][ties: True teens: 0][units: True]
-        """
-        accept_hundreds_or_insert_zero_fst = pynini.union(hundred_fst, pynutil.insert("0"))
-        accept_ties_or_insert_zero_fst = pynini.union(ties_fst, pynutil.insert("0"))
-        accept_teens_or_insert_zero_fst = pynini.union(teen_fst, pynutil.insert("00"))
-        accept_units_or_insert_zero_fst = pynini.union(unit_fst, pynutil.insert("0"))
-
-        accept_ties_and_units_fst = accept_ties_or_insert_zero_fst + maybe_delete_space_fst + accept_units_or_insert_zero_fst
-        accept_either_teens_or_ties_and_units_fst = pynini.union(accept_teens_or_insert_zero_fst, accept_ties_and_units_fst)
-
-        graph = accept_hundreds_or_insert_zero_fst + maybe_delete_space_fst + accept_either_teens_or_ties_and_units_fst
-
-        self._fst = graph.optimize()
+        # export to reuse in cardinal_declined:
+        self.above_thousand_fst = above_thousand_fst
+        self.above_million_fst = above_million_fst
+        self.above_billion_fst = above_billion_fst
         
 
 class AboveThousandFst(GraphFst):
@@ -89,7 +66,6 @@ class AboveThousandFst(GraphFst):
         # This graph transforms numbers above thousand, for example `sto dwadzieścia pięć tysięcy` or `trzy miliony`
         # In order to enter this path there are two components required: a non_zero_up_to_thousand_number and the complementing part
         # The complementing part is either sg_nominative, pl_nominative of pl_genitive depending on the number
-        non_zero_number = pynini.closure(digit_fst) + pynini.closure(pynini.difference(digit_fst, "0"), 1) + pynini.closure(digit_fst)
         non_zero_up_to_thousand_number = up_to_thousand_fst @ non_zero_number
 
         # Numbers ended with digits 2, 3 or 4 are complemented by pl_nominatives, for example `dwa tysiące`

@@ -7,7 +7,7 @@ from common.class_labels import add_left_class_label, add_right_class_label
 from tagger.graphs.idle import IdleFst
 from tagger.graphs.manual import ManualFst
 from tagger.graphs.cardinal_basic import CardinalBasicFst
-# from tagger.graphs.cardinal import CardinalFst
+from tagger.graphs.cardinal_declined import CardinalDeclinedFst
 # from tagger.graphs.ordinal import OrdinalFst
 
 
@@ -29,8 +29,8 @@ class TagFst(GraphFst):
         # ["jeden", "dwa", "trzy", "sto piętnaście", ...]
         cardinal_basic_forms = CardinalBasicFst()
         
-        # # ["jedno", "jednych", "dwiema", "trzech", "stoma", ...]
-        # cardinal_declined = CardinalDeclinedFst(cardinal_basic_forms)
+        # ["jedno", "jednych", "dwiema", "trzech", "stoma", ...]
+        cardinal_declined = CardinalDeclinedFst(cardinal_basic_forms)
         
         # # ["pierwszy", "drugi", "trzecia", "sto piąte"]
         # ordinal = OrdinalFst(cardinal_basic_forms)
@@ -42,8 +42,8 @@ class TagFst(GraphFst):
         
         if config.get("cardinals_basic_forms"):
             graph |= pynutil.add_weight(cardinal_basic_forms.fst, 1.1)
-        # if config.get("cardinals_declined"):
-        #     graph |= pynutil.add_weight(cardinal_declined_graph.fst, 1.1)
+        if config.get("cardinals_declined"):
+            graph |= pynutil.add_weight(cardinal_declined.fst, 1.1)
         # if config.get("ordinals"):
         #     graph |= pynutil.add_weight(ordinal_graph.fst, 1.1)
 

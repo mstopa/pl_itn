@@ -27,3 +27,4 @@ lstrip_whitespace_fst = pynini.cdrewrite("", "", whitespace_fst, "")
 accept_space_fst = pynini.cross(whitespace_fst, " ")
 
 digit_fst = pynini.union("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+non_zero_number = pynini.closure(digit_fst) + pynini.closure(pynini.difference(digit_fst, "0"), 1) + pynini.closure(digit_fst)
