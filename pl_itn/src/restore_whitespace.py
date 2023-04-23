@@ -73,11 +73,7 @@ def restore_whitespaces(original: str, normalized: str, tokens: List[Dict]) -> s
 
             # Remove processed input
             def slice_head(input_list, index):
-                try:
-                    output_list = input_list[index + 1:]
-                except IndexError:  # slice'y nie rzucają IndexError
-                    output_list = []
-                return output_list
+                return input_list[index + 1:]
 
             normalized = slice_head(normalized, index_normalized)
             normalized_lower = slice_head(normalized_lower, index_normalized)

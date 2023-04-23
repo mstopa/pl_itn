@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 package_root = Path(__file__).parents[1]
 
+class NormalizationError(Exception):
+    ...
 
 class Normalizer:
     def __init__(
@@ -48,7 +50,7 @@ class Normalizer:
         try:
             tagged_text = tag(self.tagger_fst, preprocessed_text)
             logger.debug(f"tag(): {tagged_text}")
-
+        
             tokens = parse_tokens(tagged_text)
             logger.debug(f"parse(): {tokens}")
 
@@ -69,9 +71,6 @@ class Normalizer:
 
             return whitespaces_restored
 
-        except ValueError as e:
+        except Exception as e:
             logger.error(e)
-            if self.debug_mode:
-                raise
-            else:
-                return text  # czy to jest właściwe zachowanie?
+            raise NormalizationError(e)

@@ -22,7 +22,6 @@ def restore_uppercase(original: str, normalized: str):
     def next_normalized_index():
         nonlocal normalized_index
         normalized_index += 1
-        return not finished()  # False if index out of range  # nie używają Panowie wartości zwracanej, co czyni z tej funkcji jednolinijkowca, co poddaje w wątpliwość sens jej tworzenia
 
     def restore():
         restored[normalized_index] = original[original_index]
