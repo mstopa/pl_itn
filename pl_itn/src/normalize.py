@@ -22,11 +22,9 @@ class Normalizer:
             self,
             tagger_fst_path: Path = package_root / "grammars/tagger.fst",
             verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
-            debug_mode: bool = False,
     ):
         self._tagger_fst = pynini.Fst.read(str(tagger_fst_path))
         self._verbalizer_fst = pynini.Fst.read(str(verbalizer_fst_path))
-        self.debug_mode = debug_mode
 
     @property
     def tagger_fst(self):

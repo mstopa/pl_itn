@@ -27,7 +27,6 @@ def main():
     normalizer = Normalizer(
         tagger_fst_path=args.tagger,
         verbalizer_fst_path=args.verbalizer,
-        debug_mode=args.debug_mode,
     )
 
     if args.interactive:
@@ -61,14 +60,7 @@ def parser():
         type=Path,
         help="Optionally provide yaml config with tagger and verbalizer paths.",
     )
-
     parser.add_argument("--log-level", choices=["debug", "info"], default="info")
-    parser.add_argument(
-        "-d",
-        "--debug-mode",
-        action="store_true",
-        help="If used, process will be interrupted on runtime errors, else it will return a step back value.",
-    )
 
     return parser.parse_args()
 
