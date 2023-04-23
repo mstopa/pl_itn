@@ -36,7 +36,7 @@ pip install .
 ### Console app
 ```bash
 usage: pl_itn [-h] (-t TEXT | -i) [--tagger TAGGER] [--verbalizer VERBALIZER] [--config CONFIG]
-              [--log_level {debug,info}] [-d]
+              [--log-level {debug,info}]
 
 Inverse Text Normalization based on Finite State Transducers
 
@@ -47,8 +47,7 @@ options:
   --tagger TAGGER
   --verbalizer VERBALIZER
   --config CONFIG       Optionally provide yaml config with tagger and verbalizer paths.
-  --log_level {debug,info}
-  -d, --debug_mode      If used, process will be interrupted on runtime errors, else it will
+  --log-level {debug,info}
                         return a step back value.
 ```
 
