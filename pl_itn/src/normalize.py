@@ -1,30 +1,30 @@
 import logging
-from pathlib import Path
 import pynini
+from pathlib import Path
 
-from pl_itn.src.tag import tag
 from pl_itn.src.parse import parse_tokens
 from pl_itn.src.permute import generate_permutations
-from pl_itn.src.verbalize import verbalize
-from pl_itn.src.restore_whitespace import restore_whitespaces
 from pl_itn.src.restore_uppercase import restore_uppercase
+from pl_itn.src.restore_whitespace import restore_whitespaces
+from pl_itn.src.tag import tag
 from pl_itn.src.utils import pre_process, post_process
+from pl_itn.src.verbalize import verbalize
 
 logger = logging.getLogger(__name__)
 
 package_root = Path(__file__).parents[1]
 
+class NormalizationError(Exception):
+    ...
 
 class Normalizer:
     def __init__(
-        self,
-        tagger_fst_path: Path = package_root / "grammars/tagger.fst",
-        verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
-        debug_mode: bool = False,
+            self,
+            tagger_fst_path: Path = package_root / "grammars/tagger.fst",
+            verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
     ):
         self._tagger_fst = pynini.Fst.read(str(tagger_fst_path))
         self._verbalizer_fst = pynini.Fst.read(str(verbalizer_fst_path))
-        self.debug_mode = debug_mode
 
     @property
     def tagger_fst(self):
@@ -48,7 +48,7 @@ class Normalizer:
         try:
             tagged_text = tag(self.tagger_fst, preprocessed_text)
             logger.debug(f"tag(): {tagged_text}")
-
+        
             tokens = parse_tokens(tagged_text)
             logger.debug(f"parse(): {tokens}")
 
@@ -69,9 +69,6 @@ class Normalizer:
 
             return whitespaces_restored
 
-        except ValueError as e:
+        except Exception as e:
             logger.error(e)
-            if self.debug_mode:
-                raise
-            else:
-                return text
+            raise NormalizationError(e)
