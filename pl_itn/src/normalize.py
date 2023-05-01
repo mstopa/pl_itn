@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 import pynini
 
+from pl_itn.src.grammar import Grammar, GrammarType
 from pl_itn.src.tag import tag
 from pl_itn.src.parse import parse_tokens
 from pl_itn.src.permute import generate_permutations
@@ -22,17 +23,30 @@ class Normalizer:
         verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
         debug_mode: bool = False,
     ):
-        self._tagger_fst = pynini.Fst.read(str(tagger_fst_path))
-        self._verbalizer_fst = pynini.Fst.read(str(verbalizer_fst_path))
+        # self._tagger_fst = pynini.Fst.read(str(tagger_fst_path))
+        # self._verbalizer_fst = pynini.Fst.read(str(verbalizer_fst_path))
+        self._tagger = Grammar(tagger_fst_path, GrammarType.TAGGER)
+        self._verbalizer = Grammar(verbalizer_fst_path, GrammarType.VERBALIZER)
         self.debug_mode = debug_mode
 
-    @property
-    def tagger_fst(self):
-        return self._tagger_fst
+    # @property
+    # def tagger_fst(self):
+    #     return self._tagger.fst
+
+    # @property
+    # def verbalizer_fst(self):
+    #     return self._verbalizer.fst
 
     @property
-    def verbalizer_fst(self):
-        return self._verbalizer_fst
+    def tagger(self):
+        return self._tagger
+
+    @property
+    def verbalizer(self):
+        return self._verbalizer
+
+    def __call__(self, text: str) -> str:
+        return self.normalize(text)
 
     def normalize(self, text: str) -> str:
         logger.debug(f"input: {text}")
@@ -46,7 +60,7 @@ class Normalizer:
         logger.debug(f"pre_process(): {preprocessed_text}")
 
         try:
-            tagged_text = tag(self.tagger_fst, preprocessed_text)
+            tagged_text = tag(self.tagger.fst, preprocessed_text)
             logger.debug(f"tag(): {tagged_text}")
 
             tokens = parse_tokens(tagged_text)
@@ -55,7 +69,7 @@ class Normalizer:
             tags_reordered = generate_permutations(tokens)
             logger.debug(f"generate_permutations(): {tags_reordered}")
 
-            verbalized_text = verbalize(self.verbalizer_fst, tags_reordered)
+            verbalized_text = verbalize(self.verbalizer.fst, tags_reordered)
             logger.debug(f"verbalize(): {verbalized_text}")
 
             postprocessed_text = post_process(verbalized_text)

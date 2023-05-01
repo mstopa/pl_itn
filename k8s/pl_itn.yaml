@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pl-itn-deployment
+  labels:
+    app: pl-itn
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pl-itn
+  template:
+    metadata:
+      labels:
+        app: pl-itn
+    spec:
+      containers:
+      - name: pl-itn
+        image: pl_itn:test
+        ports:
+        - containerPort: 10010
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pl-itn-service
+spec:
+  type: NodePort
+  selector:
+    app: pl-itn
+  ports:
+    - protocol: TCP
+      port: 10010
+      targetPort: 10010
+      nodePort: 30010

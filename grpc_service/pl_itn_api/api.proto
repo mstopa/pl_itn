@@ -2,22 +2,22 @@ syntax = "proto3";
 
 package pl_itn.v1;
 
-service PLItnService
+service PlItn
 {
     rpc Normalize(NormalizeRequest) returns (NormalizeResponse);
 
     rpc GetNormalizerSettings(ServiceInfoRequest) returns (NormalizerSettings);
-    rpc ListTaggerFst(ServiceInfoRequest) returns (repeated FstDetails);
-    rpc ListVerbalizerFst(ServiceInfoRequest) returns (repeated FstDetails);
+    rpc ListTaggerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
+    rpc ListVerbalizerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
     
     rpc ChangeDefaultFst(SetFstRequest) returns (SetFstResponse);
 }
 
 message NormalizeRequest
 {
-	string text = 1;
-    optional tagger = 2;
-    optional verbalizer = 3;
+    string text = 1;
+    optional FstDetails tagger = 2;
+    optional FstDetails verbalizer = 3;
 }
 
 message NormalizeResponse 
@@ -27,6 +27,12 @@ message NormalizeResponse
 
 message ServiceInfoRequest {}
 
+message ServiceInfoResponse
+{
+    repeated FstDetails fst = 1;
+}
+
+
 message NormalizerSettings {
     FstDetails tagger = 1;
     FstDetails verbalizer = 2;
@@ -34,7 +40,7 @@ message NormalizerSettings {
 
 enum FstType{
     TAGGER = 0;
-    VERVALIZER = 1;
+    VERBALIZER = 1;
 }
 
 message FstDetails {
