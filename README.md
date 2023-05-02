@@ -4,6 +4,8 @@ Inverse Text Normalization is an NLP task of changing the spoken form of a phras
 one two three -> 1 2 3
 ```
 
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+
 `pl_itn` is an opensource Polish ITN Python library and REST API for practical applications.
 
 This project is an implementation of [NeMo Inverse Text Normalization](https://arxiv.org/abs/2104.05055) for Polish.
@@ -25,11 +27,19 @@ For [pynini](https://pypi.org/project/pynini/)
 ## Setup
 Make sure to first install prerequisites, especially OpenFST.
 
+### Install from PyPI
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate | source .venv/Scripts/activate
-pip install wheel
+pip install pl_itn
+```
+
+### Build from source
+```bash
 pip install .
+```
+
+### Editable install for development
+```bash
+pip install -e .[dev]
 ```
 
 ## Usage
