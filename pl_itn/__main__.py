@@ -4,7 +4,6 @@ from pathlib import Path
 from signal import signal, SIGINT, SIGTERM
 
 from pl_itn import Normalizer, package_root
-from pl_itn.VERSION import __version__
 from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
 from pl_itn.logging import ITN_logger
 
