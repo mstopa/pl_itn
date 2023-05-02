@@ -54,13 +54,3 @@ class GrammarLoader:
                 message=f"'{fst_name}' grammar of type {fst_type} not found.",
             )
         return self.resources_path / fst_name, specified_fst_description
-
-
-if __name__ == "__main__":
-    try:
-        rl = GrammarLoader(
-            Path("/home/tkurkowski/Tasks/studia/inzynierka/fst_resources")
-        )
-        print(rl.get_available_fst(GrammarType.VERBALIZER))
-    except GrammarLoaderError:
-        print("asdas")

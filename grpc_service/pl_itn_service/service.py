@@ -80,7 +80,6 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
         try:
             tagger = self._grammar_to_fst_details(self.normalizer.tagger)
             verbalizer = self._grammar_to_fst_details(self.normalizer.verbalizer)
-
             return api_pb2.NormalizerSettings(tagger=tagger, verbalizer=verbalizer)
 
         except Exception as e:
@@ -110,15 +109,16 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
                 for (fst_name, fst_desctiption) in available_taggers.items()
             ]
             return api_pb2.ServiceInfoResponse(fst=list_taggers_response)
-        except GrammarLoaderError as e:
-            self.logger.error(e)
-            context.set_code(StatusCode.UNKNOWN)  # TODO think what fits here
-            context.set_details(f"Error during checking resources: {e}")
 
+        except GrammarLoaderError as e:
+            self.logger.error(e.message)
+            context.set_code(e.grpc_error)
+            context.set_details(e.message)
         except Exception as e:
             self.logger.error(e)
             context.set_code(StatusCode.UNKNOWN)
             context.set_details(f"Unknown error ocurred: {e}")
+
         return api_pb2.ServiceInfoResponse()
 
     def ListVerbalizerFst(self, request, context):
@@ -135,21 +135,22 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
                 for (fst_name, fst_desctiption) in available_verbalizers.items()
             ]
             return api_pb2.ServiceInfoResponse(fst=list_verbalizers_response)
-        except GrammarLoaderError as e:
-            self.logger.error(e)
-            context.set_code(StatusCode.UNKNOWN)  # TODO think what fits here
-            context.set_details(f"Error during checking resources: {e}")
 
+        except GrammarLoaderError as e:
+            self.logger.error(e.message)
+            context.set_code(e.grpc_error)
+            context.set_details(e.message)
         except Exception as e:
             self.logger.error(e)
             context.set_code(StatusCode.UNKNOWN)
             context.set_details(f"Unknown error ocurred: {e}")
+
         return api_pb2.ServiceInfoResponse()
 
     def SetFst(self, request, context):
+        fst_name = request.name
+        fst_type = request.type
         try:
-            fst_name = request.name
-            fst_type = request.type
             grammar_type = GrammarType[api_pb2.FstType.Name(fst_type)]
             fst_path, description = self.grammar_loader.get_specified_fst(
                 fst_name, grammar_type
@@ -157,7 +158,13 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
 
             self.normalizer.set_grammar(fst_path, grammar_type, description)
 
+        except GrammarLoaderError as e:
+            self.logger.error(e.message)
+            context.set_code(e.grpc_error)
+            context.set_details(e.message)
         except Exception as e:
             self.logger.error(e)
+            context.set_code(StatusCode.UNKNOWN)
+            context.set_details(f"Unknown error ocurred: {e}")
             ...
         return api_pb2.SetFstResponse()
