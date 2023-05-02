@@ -5,16 +5,17 @@ from pynini import Fst, FstIOError
 
 GrammarType = Enum("GrammarType", ["TAGGER", "VERBALIZER"])
 
-class Grammar:
 
-    def __init__(self, fst_path: Path, grammar_type: GrammarType, description: str = ""):
+class Grammar:
+    def __init__(
+        self, fst_path: Path, grammar_type: GrammarType, description: str = ""
+    ):
         # try:
         self._fst = Fst.read(str(fst_path))
         self._type = grammar_type
         # except FstIOError as e:
-        
-        self._fst_path=fst_path
-        self._description=description
+        self._fst_path = fst_path
+        self._description = description
 
     @property
     def fst(self):
@@ -31,5 +32,3 @@ class Grammar:
     @property
     def description(self):
         return self._description
-    
-

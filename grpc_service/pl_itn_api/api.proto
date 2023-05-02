@@ -10,7 +10,7 @@ service PlItn
     rpc ListTaggerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
     rpc ListVerbalizerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
     
-    rpc ChangeDefaultFst(SetFstRequest) returns (SetFstResponse);
+    rpc SetFst(SetFstRequest) returns (SetFstResponse);
 }
 
 message NormalizeRequest

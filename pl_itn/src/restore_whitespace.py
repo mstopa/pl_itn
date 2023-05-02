@@ -61,9 +61,9 @@ def restore_whitespaces(original: str, normalized: str, tokens: List[Dict]) -> s
                 return ""
 
             word_with_spaces = (
-                    maybe_get_whitespace(original, index_original - 1)
-                    + original[index_original]
-                    + maybe_get_whitespace(original, index_original + 1)
+                maybe_get_whitespace(original, index_original - 1)
+                + original[index_original]
+                + maybe_get_whitespace(original, index_original + 1)
             )
             restored += word_with_spaces
 
@@ -73,7 +73,7 @@ def restore_whitespaces(original: str, normalized: str, tokens: List[Dict]) -> s
 
             # Remove processed input
             def slice_head(input_list, index):
-                return input_list[index + 1:]
+                return input_list[index + 1 :]
 
             normalized = slice_head(normalized, index_normalized)
             normalized_lower = slice_head(normalized_lower, index_normalized)

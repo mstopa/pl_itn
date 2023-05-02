@@ -16,28 +16,19 @@ logger = logging.getLogger(__name__)
 
 package_root = Path(__file__).parents[1]
 
+
 class NormalizationError(Exception):
     ...
 
+
 class Normalizer:
     def __init__(
-            self,
-            tagger_fst_path: Path = package_root / "grammars/tagger.fst",
-            verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
+        self,
+        tagger_fst_path: Path = package_root / "grammars/tagger.fst",
+        verbalizer_fst_path: Path = package_root / "grammars/verbalizer.fst",
     ):
-        # self._tagger_fst = pynini.Fst.read(str(tagger_fst_path))
-        # self._verbalizer_fst = pynini.Fst.read(str(verbalizer_fst_path))
         self._tagger = Grammar(tagger_fst_path, GrammarType.TAGGER)
         self._verbalizer = Grammar(verbalizer_fst_path, GrammarType.VERBALIZER)
-        self.debug_mode = debug_mode
-
-    # @property
-    # def tagger_fst(self):
-    #     return self._tagger.fst
-
-    # @property
-    # def verbalizer_fst(self):
-    #     return self._verbalizer.fst
 
     @property
     def tagger(self):
@@ -46,6 +37,16 @@ class Normalizer:
     @property
     def verbalizer(self):
         return self._verbalizer
+
+    def set_grammar(
+        self, grammar_fst_path: Path, grammar_type: GrammarType, description: str = ""
+    ):
+        if grammar_type == GrammarType.TAGGER:
+            self._tagger = Grammar(grammar_fst_path, GrammarType.TAGGER, description)
+        else:
+            self._verbalizer = Grammar(
+                grammar_fst_path, GrammarType.VERBALIZER, description
+            )
 
     def __call__(self, text: str) -> str:
         return self.normalize(text)
@@ -64,7 +65,7 @@ class Normalizer:
         try:
             tagged_text = tag(self.tagger.fst, preprocessed_text)
             logger.debug(f"tag(): {tagged_text}")
-        
+
             tokens = parse_tokens(tagged_text)
             logger.debug(f"parse(): {tokens}")
 

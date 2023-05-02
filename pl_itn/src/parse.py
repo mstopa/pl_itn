@@ -43,6 +43,7 @@ def _parse_final_leaf(text):
 
     yield from zip(keywords, values)
 
+
 def _parse_recursively(text):
     text = _strip_braces_and_whitespaces(text)
     current_level_dict = OrderedDict()

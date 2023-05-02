@@ -8,7 +8,6 @@ class Logger:
     def __init__(
         self, name: str, console_log_level: str, file_log_level: str, file_log_dir: str
     ):
-
         Path(file_log_dir).mkdir(parents=True, exist_ok=True)
 
         self._logger = logging.getLogger(name)

@@ -15,30 +15,30 @@ class PlItnStub(object):
             channel: A grpc.Channel.
         """
         self.Normalize = channel.unary_unary(
-                '/pl_itn.v1.PlItn/Normalize',
-                request_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeRequest.SerializeToString,
-                response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeResponse.FromString,
-                )
+            "/pl_itn.v1.PlItn/Normalize",
+            request_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeRequest.SerializeToString,
+            response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeResponse.FromString,
+        )
         self.GetNormalizerSettings = channel.unary_unary(
-                '/pl_itn.v1.PlItn/GetNormalizerSettings',
-                request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
-                response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizerSettings.FromString,
-                )
+            "/pl_itn.v1.PlItn/GetNormalizerSettings",
+            request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
+            response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizerSettings.FromString,
+        )
         self.ListTaggerFst = channel.unary_unary(
-                '/pl_itn.v1.PlItn/ListTaggerFst',
-                request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
-                response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
-                )
+            "/pl_itn.v1.PlItn/ListTaggerFst",
+            request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
+            response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
+        )
         self.ListVerbalizerFst = channel.unary_unary(
-                '/pl_itn.v1.PlItn/ListVerbalizerFst',
-                request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
-                response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
-                )
-        self.ChangeDefaultFst = channel.unary_unary(
-                '/pl_itn.v1.PlItn/ChangeDefaultFst',
-                request_serializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstRequest.SerializeToString,
-                response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstResponse.FromString,
-                )
+            "/pl_itn.v1.PlItn/ListVerbalizerFst",
+            request_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
+            response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
+        )
+        self.SetFst = channel.unary_unary(
+            "/pl_itn.v1.PlItn/SetFst",
+            request_serializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstRequest.SerializeToString,
+            response_deserializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstResponse.FromString,
+        )
 
 
 class PlItnServicer(object):
@@ -47,152 +47,213 @@ class PlItnServicer(object):
     def Normalize(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def GetNormalizerSettings(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def ListTaggerFst(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
     def ListVerbalizerFst(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
-    def ChangeDefaultFst(self, request, context):
+    def SetFst(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_PlItnServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Normalize': grpc.unary_unary_rpc_method_handler(
-                    servicer.Normalize,
-                    request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeRequest.FromString,
-                    response_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeResponse.SerializeToString,
-            ),
-            'GetNormalizerSettings': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetNormalizerSettings,
-                    request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
-                    response_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizerSettings.SerializeToString,
-            ),
-            'ListTaggerFst': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListTaggerFst,
-                    request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
-                    response_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.SerializeToString,
-            ),
-            'ListVerbalizerFst': grpc.unary_unary_rpc_method_handler(
-                    servicer.ListVerbalizerFst,
-                    request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
-                    response_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.SerializeToString,
-            ),
-            'ChangeDefaultFst': grpc.unary_unary_rpc_method_handler(
-                    servicer.ChangeDefaultFst,
-                    request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstRequest.FromString,
-                    response_serializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstResponse.SerializeToString,
-            ),
+        "Normalize": grpc.unary_unary_rpc_method_handler(
+            servicer.Normalize,
+            request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeRequest.FromString,
+            response_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizeResponse.SerializeToString,
+        ),
+        "GetNormalizerSettings": grpc.unary_unary_rpc_method_handler(
+            servicer.GetNormalizerSettings,
+            request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
+            response_serializer=pl__itn__service_dot_proto_dot_api__pb2.NormalizerSettings.SerializeToString,
+        ),
+        "ListTaggerFst": grpc.unary_unary_rpc_method_handler(
+            servicer.ListTaggerFst,
+            request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
+            response_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.SerializeToString,
+        ),
+        "ListVerbalizerFst": grpc.unary_unary_rpc_method_handler(
+            servicer.ListVerbalizerFst,
+            request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.FromString,
+            response_serializer=pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.SerializeToString,
+        ),
+        "SetFst": grpc.unary_unary_rpc_method_handler(
+            servicer.SetFst,
+            request_deserializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstRequest.FromString,
+            response_serializer=pl__itn__service_dot_proto_dot_api__pb2.SetFstResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'pl_itn.v1.PlItn', rpc_method_handlers)
+        "pl_itn.v1.PlItn", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class PlItn(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Normalize(request,
+    def Normalize(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pl_itn.v1.PlItn/Normalize',
+            "/pl_itn.v1.PlItn/Normalize",
             pl__itn__service_dot_proto_dot_api__pb2.NormalizeRequest.SerializeToString,
             pl__itn__service_dot_proto_dot_api__pb2.NormalizeResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def GetNormalizerSettings(request,
+    def GetNormalizerSettings(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pl_itn.v1.PlItn/GetNormalizerSettings',
+            "/pl_itn.v1.PlItn/GetNormalizerSettings",
             pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
             pl__itn__service_dot_proto_dot_api__pb2.NormalizerSettings.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def ListTaggerFst(request,
+    def ListTaggerFst(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pl_itn.v1.PlItn/ListTaggerFst',
+            "/pl_itn.v1.PlItn/ListTaggerFst",
             pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
             pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def ListVerbalizerFst(request,
+    def ListVerbalizerFst(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pl_itn.v1.PlItn/ListVerbalizerFst',
+            "/pl_itn.v1.PlItn/ListVerbalizerFst",
             pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoRequest.SerializeToString,
             pl__itn__service_dot_proto_dot_api__pb2.ServiceInfoResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
 
     @staticmethod
-    def ChangeDefaultFst(request,
+    def SetFst(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/pl_itn.v1.PlItn/ChangeDefaultFst',
+            "/pl_itn.v1.PlItn/SetFst",
             pl__itn__service_dot_proto_dot_api__pb2.SetFstRequest.SerializeToString,
             pl__itn__service_dot_proto_dot_api__pb2.SetFstResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
