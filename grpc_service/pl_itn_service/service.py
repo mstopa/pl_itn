@@ -155,7 +155,6 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
             fst_path, description = self.grammar_loader.get_specified_fst(
                 fst_name, grammar_type
             )
-
             self.normalizer.set_grammar(fst_path, grammar_type, description)
 
         except GrammarLoaderError as e:
@@ -166,5 +165,4 @@ class PlItnService(api_pb2_grpc.PlItnServicer):
             self.logger.error(e)
             context.set_code(StatusCode.UNKNOWN)
             context.set_details(f"Unknown error ocurred: {e}")
-            ...
         return api_pb2.SetFstResponse()
