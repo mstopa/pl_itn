@@ -10,3 +10,5 @@ RUN pip install . ; \
     pip install .
 
 EXPOSE 10010
+ENTRYPOINT ["pl_itn_service"]
+

@@ -2,13 +2,6 @@ from pathlib import Path
 
 from grpc import StatusCode
 
-from google.protobuf import any_pb2
-from google.rpc import code_pb2
-from google.rpc import error_details_pb2
-from google.rpc import status_pb2
-
-from grpc_status import rpc_status
-
 from pl_itn_service.grammar_loader import GrammarLoader, GrammarLoaderError
 from pl_itn_service.logger import Logger
 from pl_itn_service.proto import api_pb2, api_pb2_grpc
