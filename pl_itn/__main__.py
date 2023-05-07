@@ -7,7 +7,6 @@ from pl_itn import Normalizer, package_root
 from pl_itn.logging import ITN_logger
 from pl_itn.exceptions import InterruptException, gentle_interrupt_handler
 
-
 def main():
     args = parser()
 

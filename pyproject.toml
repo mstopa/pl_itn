@@ -9,7 +9,7 @@ authors = [
     {name = "cansubmarinesswim"}
 ]
 # dynamic = ["version"]
-version = "0.1.0rc0"
+version = "0.1.0-rc0"
 requires-python = ">=3.7"
 license = {text = "Apache-2.0"}
 dependencies = [
@@ -82,7 +82,6 @@ doc = [
 workflow = [
     "pdm-pep517>=1.0.0,<2.0.0",
     "parver>=0.3.1",
-    "towncrier>=20",
     "pycomplete~=0.3"
 ]
 
@@ -108,50 +107,6 @@ extend-exclude = ["tests/fixtures"]
 target-version = "py37"
 mccabe.max-complexity = 10
 isort.known-first-party = ["pdm"]
-
-[tool.towncrier]
-package = "pl_itn"
-filename = "CHANGELOG.md"
-issue_format = "[#{issue}](https://github.com/mstopa/pl_itn/issues/{issue})"
-directory = "news/"
-title_format = "Release v{version} ({project_date})"
-template = "news/towncrier_template.md"
-underlines = "-~^"
-
-  [[tool.towncrier.type]]
-  directory = "break"
-  name = "Breaking Changes"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "feature"
-  name = "Features & Improvements"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "bugfix"
-  name = "Bug Fixes"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "doc"
-  name = "Documentation"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "dep"
-  name = "Dependencies"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "removal"
-  name = "Removals and Deprecations"
-  showcontent = true
-
-  [[tool.towncrier.type]]
-  directory = "misc"
-  name = "Miscellany"
-  showcontent = true
 
 [build-system]
 requires = ["pdm-backend"]
