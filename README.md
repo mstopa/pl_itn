@@ -16,6 +16,7 @@ This project is an implementation of [NeMo Inverse Text Normalization](https://a
 [Docker](#docker)\
 [Usage](#usage)\
 [gRPC service](#grpc-service)\
+[Building custom grammars](#building-custom-grammars)\
 [Documentation](#documentation)\
 [Contributing](#contributing)\
 [License](#License)\
@@ -44,7 +45,7 @@ pip install .
 pip install -e .[dev]
 ```
 
-## Docker
+### Docker
 
 To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.\
 To build docker image with gRPC service use `grpc_service.dockerfile` file.
@@ -105,6 +106,63 @@ Example of building the image and starting the service.
 docker build -t pl_itn_service:test -f grpc_service.dockerfile .
 docker run -p 10010:10010 pl_itn_service:test
 ```
+
+## Building custom grammars
+Custom grammars can be built using `build_grammar/build_grammar.py` script.
+
+There are three demo grammars available:
+- not declined cardinal numbers (e.g. "jeden", "dwa", "trzy")
+- declined cardinal numbers (e.g. "jednego", "dwóch", "trzech")
+- ordinal numbers (e.g. "pierwszy", "druga", "trzecie")
+
+Normalization types can be included and excluded from the grammar through the config file, which is set by default to `build_grammar/grammar_config.yaml`.
+
+```bash
+# cardinals_basic_forms: True
+# cardinals_declined: True
+# ordinals: True
+
+$ python3 build_grammar/build_grammar.py --grammars-dir all
+
+$ pl_itn \
+  --tagger all/tagger.fst \
+  --verbalizer all/verbalizer.fst \
+  -t "Jeden trzech piąta"
+
+1 3 5
+```
+
+```bash
+# cardinals_basic_forms: True
+# cardinals_declined: False
+# ordinals: True
+
+$ python3 build_grammar/build_grammar.py --grammars-dir cardinals_basic_ordinals
+
+$ pl_itn \
+  --tagger cardinals_basic_ordinals/tagger.fst \
+  --verbalizer cardinals_basic_ordinals/verbalizer.fst \
+  -t "Jeden trzech piąta"
+
+1 trzech 5
+```
+
+```bash
+# cardinals_basic_forms: True
+# cardinals_declined: False
+# ordinals: False
+
+$ python3 build_grammar/build_grammar.py --grammars-dir only_basic_cardinals
+
+$ pl_itn \
+  --tagger only_basic_cardinals/tagger.fst \
+  --verbalizer only_basic_cardinals/verbalizer.fst \
+  -t "Jeden trzech piąta"
+
+1 trzech piąta
+```
+
+See [Documentation](#documentation) for more details.
 
 ## Documentation
 
