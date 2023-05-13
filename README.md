@@ -13,7 +13,9 @@ This project is an implementation of [NeMo Inverse Text Normalization](https://a
 ## Table of contents
 [Prerequisites](#prerequisites)\
 [Setup](#setup)\
+[Docker](#docker)\
 [Usage](#usage)\
+[gRPC service](#grpc-service)\
 [Documentation](#documentation)\
 [Contributing](#contributing)\
 [License](#License)\
@@ -40,6 +42,15 @@ pip install .
 ### Editable install for development
 ```bash
 pip install -e .[dev]
+```
+
+## Docker
+
+To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.\
+To build docker image with gRPC service use `grpc_service.dockerfile` file.
+
+```bash
+docker build -t <IMAGE:TAG> -f <DOCKERFILE> .
 ```
 
 ## Usage
@@ -77,6 +88,23 @@ pl_itn -t "drugi listopada dwa tysiące osiemnastego roku"
 '11:55'
 ```
 
+### Docker
+
+Existing docker image containing pl_itn library is required. For build command refer to [Docker](#docker) section.
+```bash
+docker run --rm -it <IMAGE:TAG> --help
+```
+
+## gRPC Service
+
+gRPC service methods are described in `grpc_service/pl_itn_api/api.proto` file. Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
+Service within container serves on port 10010.
+
+Example of building the image and starting the service.
+```bash
+docker build -t pl_itn_service:test -f grpc_service.dockerfile .
+docker run -p 10010:10010 pl_itn_service:test
+```
 
 ## Documentation
 
