@@ -8,28 +8,28 @@ from tagger.tag import TagFst
 from verbalizer.verbalize import VerbalizeFst
 
 
-def main(config_path: Path, tagger_path: Path, verbalizer_path: Path):
+def main(config_path: Path, grammars_dir: Path):
     with config_path.open() as f:
         config = yaml.safe_load(f)
 
-    tagger_path.parent.mkdir(parents=True, exist_ok=True)
-    verbalizer_path.parent.mkdir(parents=True, exist_ok=True)
+    grammars_dir.mkdir(parents=True, exist_ok=True)
+    tagger_path = grammars_dir / 'tagger.fst'
+    verbalizer_path = grammars_dir / 'verbalizer.fst'
 
     graph = TagFst(config)
-    graph.write_to_fst(str(tagger_path))
+    graph.save_fst(str(tagger_path))
 
     graph = VerbalizeFst(config)
-    graph.write_to_fst(str(verbalizer_path))
- 
+    graph.save_fst(str(verbalizer_path))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Build and save to file finite state transducer grammars.'
     )
-    parser.add_argument('--tagger', type=Path, help="Tagger graph will be saved to provided path.", default=Path("pl_itn/grammars/tagger.fst"))
-    parser.add_argument('--verbalizer', type=Path, help="Verbalizer graph will be saved to provided path.", default=Path("pl_itn/grammars/verbalizer.fst"))    
-    parser.add_argument('-c', '--config_path', type=Path, default=f'build_grammar/grammar_config.yaml',
+    parser.add_argument('-c', '--config-path', type=Path, default=f'build_grammar/grammar_config.yaml',
                         help='Grammar configuration file')
+    parser.add_argument('-g', '--grammars-dir', type=Path, help="Directory where grammars will be saved.", default=Path("pl_itn/grammars"))
     args = parser.parse_args()
 
-    main(args.config_path, args.tagger, args.verbalizer)
+    main(args.config_path, args.grammars_dir)

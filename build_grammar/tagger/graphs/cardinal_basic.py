@@ -51,9 +51,9 @@ class CardinalBasicFst(GraphFst):
             add_left_class_label("cardinal")
             + transformation
             + add_right_class_label()
-        )  
+        )
 
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()
 
         # export to reuse in cardinal_declined and ordinal:
         self.hundred_fst = hundred_fst
@@ -88,7 +88,7 @@ class AboveThousandFst(GraphFst):
         # But it is also possible to skip the numeral, for example 'tysiąc' -> 1000
         sg_nominative_fst = pynini.cross(sg_nominative_complement, "001")
 
-        self._fst = pynini.union(
+        self.fst = pynini.union(
             sg_nominative_fst,
             pl_nominative_fst,
             pl_genitive_fst,

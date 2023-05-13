@@ -25,7 +25,7 @@ class UpToThousandFst(GraphFst):
 
         graph = accept_hundreds_or_insert_zero_fst + maybe_delete_space_fst + accept_either_teens_or_ties_and_units_fst
 
-        self._fst = graph.optimize()
+        self.fst = graph.optimize()
 
 
 class UpToHundredFst(GraphFst):
@@ -45,7 +45,7 @@ class UpToHundredFst(GraphFst):
 
         graph = accept_either_teens_or_ties_and_units_fst
 
-        self._fst = graph.optimize()
+        self.fst = graph.optimize()
 
 
 remove_leading_zeros_fst = (

@@ -14,4 +14,4 @@ class ManualFst(GraphFst):
             + add_right_rule_label()
         )
 
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()

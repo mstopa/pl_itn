@@ -35,4 +35,4 @@ class CardinalFst(GraphFst):
             + rstrip_class_label()
         )
 
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()

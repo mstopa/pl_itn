@@ -14,4 +14,4 @@ class IdleFst(GraphFst):
             + pynini.closure(not_quote_fst)
             + rstrip_rule_label()
         )
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()

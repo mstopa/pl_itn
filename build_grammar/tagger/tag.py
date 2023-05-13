@@ -55,4 +55,4 @@ class TagFst(GraphFst):
 
         transformations = transformation + pynini.closure(accept_space_fst + transformation)
 
-        self._fst = transformations.optimize()
+        self.fst = transformations.optimize()

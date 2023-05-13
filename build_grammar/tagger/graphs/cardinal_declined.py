@@ -34,7 +34,7 @@ class CardinalDeclinedFst(GraphFst):
             + add_right_class_label()
         )  
 
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()
 
 
 class GenderCaseCardinalFst(GraphFst):
@@ -81,13 +81,13 @@ class GenderCaseCardinalFst(GraphFst):
         )
 
         graph @= remove_leading_zeros_fst
-        self._fst = graph.optimize()
+        self.fst = graph.optimize()
 
 
 class AboveThousandFst(GraphFst):
     def __init__(self, gender: str, case: str, complement: str, cardinal_basic_fst: pynini.Fst, non_zero_up_to_thousand_number: pynini.Fst):
         if case == "nom":
-            self._fst = cardinal_basic_fst
+            self.fst = cardinal_basic_fst
             return
         
         sg_complement_fst = pynini.string_file(f"build_grammar/tagger/data/cardinal_declined/{gender}/{case}/{complement}_sg.tsv")
@@ -103,7 +103,7 @@ class AboveThousandFst(GraphFst):
             + pynutil.delete(pl_complement_fst)
         )
 
-        self._fst = pynini.union(
+        self.fst = pynini.union(
             sg_transformation,
             pl_transformation,
             pynutil.insert("000")

@@ -32,7 +32,7 @@ class OrdinalFst(GraphFst):
             + add_right_class_label()
         )  
 
-        self._fst = transformation.optimize()
+        self.fst = transformation.optimize()
 
 
 class GenderCaseOrdinalFst(GraphFst):
@@ -63,7 +63,7 @@ class GenderCaseOrdinalFst(GraphFst):
         )
 
         graph @= remove_leading_zeros_fst
-        self._fst = graph.optimize()
+        self.fst = graph.optimize()
 
 
 class AboveHundredFst(GraphFst):
@@ -90,7 +90,7 @@ class AboveHundredFst(GraphFst):
             pynutil.insert(padding)
         )
 
-        self._fst = graph.optimize()
+        self.fst = graph.optimize()
 
     def build_prefix_graph(self, complement: str):
         if complement == "hundred":
