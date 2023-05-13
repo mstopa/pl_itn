@@ -1,0 +1,31 @@
+[tool.pdm]
+# PEP 621 project metadata
+# See https://www.python.org/dev/peps/pep-0621/
+[project]
+name = "pl_itn_grpc_service"
+description = "gRPC service for pl_itn"
+authors = [
+    {name = "mstopa"},
+    {name = "cansubmarinesswim"}
+]
+version = "0.1.0-rc0"
+requires-python = ">=3.7"
+license = {text = "Apache-2.0"}
+dependencies = [
+    # also, pl_itn, but the version is TBD
+    "grpcio>=1.48.0",
+    "grpcio-status>=1.48.0",
+    "protobuf>=4.21.0",
+    "pynini>=2.1.4",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+pl_itn_service = "pl_itn_service.app:main"
+
+[tool.pdm.build]
+includes = ["pl_itn_service"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

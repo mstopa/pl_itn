@@ -1,5 +1,5 @@
-from collections import OrderedDict
 import re
+from collections import OrderedDict
 from typing import List
 
 """
@@ -41,8 +41,7 @@ def _parse_final_leaf(text):
     if len(keywords) != len(values):
         raise ValueError("Parsing tagged text into tokens failed.")
 
-    for index, keyword in enumerate(keywords):
-        yield ((keyword, values[index]))
+    yield from zip(keywords, values)
 
 
 def _parse_recursively(text):

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package pl_itn.v1;
+
+service PlItn
+{
+    rpc Normalize(NormalizeRequest) returns (NormalizeResponse);
+
+    rpc GetNormalizerSettings(ServiceInfoRequest) returns (NormalizerSettings);
+    rpc ListTaggerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
+    rpc ListVerbalizerFst(ServiceInfoRequest) returns (ServiceInfoResponse);
+    
+    rpc SetFst(SetFstRequest) returns (SetFstResponse);
+}
+
+message NormalizeRequest
+{
+    string text = 1;
+    optional FstDetails tagger = 2;
+    optional FstDetails verbalizer = 3;
+}
+
+message NormalizeResponse 
+{
+    string normalized_text = 1;
+}
+
+message ServiceInfoRequest {}
+
+message ServiceInfoResponse
+{
+    repeated FstDetails fst = 1;
+}
+
+
+message NormalizerSettings {
+    FstDetails tagger = 1;
+    FstDetails verbalizer = 2;
+}
+
+enum FstType{
+    TAGGER = 0;
+    VERBALIZER = 1;
+}
+
+message FstDetails {
+    string name = 1;
+    FstType type = 2;
+    optional string description = 3; 
+
+}
+
+message SetFstRequest {
+    string name = 1;
+    FstType type = 2;
+}
+
+message SetFstResponse {}
+
