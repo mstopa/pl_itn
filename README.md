@@ -46,7 +46,7 @@ pip install -e .[dev]
 
 ## Docker
 
-To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.
+To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.\
 To build docker image with gRPC service use `grpc_service.dockerfile` file.
 
 ```bash
