@@ -22,12 +22,12 @@ class VerbalizeFst(GraphFst):
         whitelist = ManualFst()
         idle = IdleFst()
 
-        graph = (
-            cardinal.fst
-            | ordinal.fst
-            | whitelist.fst
-            | idle.fst
-        )
+        graph = whitelist.fst | idle.fst
+
+        if config.get("cardinals_basic_forms") or config.get("cardinals_declined"):
+            graph |= cardinal.fst
+        if config.get("ordinals"):
+            graph |= ordinal.fst
 
         transformation = (
             lstrip_class_label("tokens")

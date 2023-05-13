@@ -81,7 +81,7 @@ class AboveThousandFst(GraphFst):
         # Numbers ended with digits above 4 are complemented by genitive, for example `pięć tysięcy`
         numbers_complemented_by_pl_genitive = pynini.closure(digit_fst) + pynini.union("5", "6", "7", "8", "9")
         # Add exceptional teens which are complemented by genitive, for example `dwanaście tysięcy`
-        numbers_complemented_by_pl_genitive += pynini.union("011", "012", "013", "014")
+        numbers_complemented_by_pl_genitive |= pynini.union("011", "012", "013", "014")
         number_fst = non_zero_up_to_thousand_number @ numbers_complemented_by_pl_genitive
         pl_genitive_fst = number_fst + surely_delete_space_fst + pynutil.delete(pl_genitive_complement)
 

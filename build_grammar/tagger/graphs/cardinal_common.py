@@ -10,7 +10,7 @@ class UpToThousandFst(GraphFst):
         Possible options:
         001 <- [hundred: 0][ties: 0 teens: 0][units: True]
         011 <- [hundred: 0][ties: 0 teens: True][units: 0]
-        021 <- [hundred: 0][ties: True teens: 0][units: 1]
+        021 <- [hundred: 0][ties: True teens: 0][units: True]
         101 <- [hundred: True][ties: 0 teens: 0][units: True]
         111 <- [hundred: True][ties: 0 teens: True][units: 0]
         121 <- [hundred: True][ties: True teens: 0][units: True]
@@ -34,7 +34,7 @@ class UpToHundredFst(GraphFst):
         Possible options:
         01 <- [ties: 0 teens: 0][units: True]
         11 <- [ties: 0 teens: True][units: 0]
-        21 <- [ties: True teens: 0][units: 1]
+        21 <- [ties: True teens: 0][units: True]
         """
         accept_ties_or_insert_zero_fst = pynini.union(ties_fst, pynutil.insert("0"))
         accept_teens_or_insert_zero_fst = pynini.union(teen_fst, pynutil.insert("00"))
