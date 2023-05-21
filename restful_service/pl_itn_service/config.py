@@ -1,6 +1,7 @@
 from os import getenv
 from pathlib import Path
 
+
 class Config:
     def __init__(self):
         self.fst_dir = getenv("FST_DIR", "/fst_models")
