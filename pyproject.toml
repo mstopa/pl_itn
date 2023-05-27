@@ -55,11 +55,13 @@ complete = {call = "tasks.complete:main", help = "Create autocomplete files for 
 
 [tool.pdm.dev-dependencies]
 test = [
+    "pandas>=2.0.0",
     "pdm[pytest]",
     "pytest-cov",
     "pytest>=6.0.2",
     "pytest-xdist>=1.31.0",
-    "pytest-rerunfailures>=10.2"
+    "pytest-rerunfailures>=10.2",
+    "tqdm>=4.65.0",
 ]
 tox = [
     "tox",
