@@ -31,6 +31,13 @@ classifiers = [
     "Topic :: Text Processing"
 ]
 
+# [project.optional-dependencies]
+# test = [
+#     "pandas",
+#     "pytest",
+#     "tqdm",
+# ]
+
 [project.urls]
 Repository = "https://github.com/mstopa/pl_itn"
 Documentation = "https://pl_itn.readthedocs.io/en/latest/"
@@ -55,32 +62,38 @@ complete = {call = "tasks.complete:main", help = "Create autocomplete files for 
 
 [tool.pdm.dev-dependencies]
 test = [
-    "pandas>=2.0.0",
-    "pdm[pytest]",
-    "pytest-cov",
-    "pytest>=6.0.2",
-    "pytest-xdist>=1.31.0",
-    "pytest-rerunfailures>=10.2",
-    "tqdm>=4.65.0",
+    "pandas",
+    "pytest",
+    "tqdm",
 ]
-tox = [
-    "tox",
-    "tox-pdm>=0.5",
-]
-doc = [
-    "mkdocs>=1.1",
-    "mkdocs-material>=7.3",
-    "mkdocstrings[python]>=0.18",
-    "mike>=1.1.2",
-    "setuptools>=62.3.3",
-    "markdown-exec>=0.7.0",
-    "mkdocs-redirects>=1.2.0",
-]
-workflow = [
-    "pdm-pep517>=1.0.0,<2.0.0",
-    "parver>=0.3.1",
-    "pycomplete~=0.3"
-]
+
+# test = [
+#     "pandas>=2.0.0",
+#     "pdm[pytest]",
+#     "pytest-cov",
+#     "pytest>=6.0.2",
+#     "pytest-xdist>=1.31.0",
+#     "pytest-rerunfailures>=10.2",
+#     "tqdm>=4.65.0",
+# ]
+# tox = [
+#     "tox",
+#     "tox-pdm>=0.5",
+# ]
+# doc = [
+#     "mkdocs>=1.1",
+#     "mkdocs-material>=7.3",
+#     "mkdocstrings[python]>=0.18",
+#     "mike>=1.1.2",
+#     "setuptools>=62.3.3",
+#     "markdown-exec>=0.7.0",
+#     "mkdocs-redirects>=1.2.0",
+# ]
+# workflow = [
+#     "pdm-pep517>=1.0.0,<2.0.0",
+#     "parver>=0.3.1",
+#     "pycomplete~=0.3"
+# ]
 
 [tool.black]
 line-length = 120
