@@ -31,12 +31,12 @@ classifiers = [
     "Topic :: Text Processing"
 ]
 
-# [project.optional-dependencies]
-# test = [
-#     "pandas",
-#     "pytest",
-#     "tqdm",
-# ]
+[project.optional-dependencies]
+test = [
+    "pandas",
+    "pytest",
+    "tqdm",
+]
 
 [project.urls]
 Repository = "https://github.com/mstopa/pl_itn"
