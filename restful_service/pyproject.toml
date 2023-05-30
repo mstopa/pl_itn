@@ -12,7 +12,7 @@ version = "0.1.0-rc0"
 requires-python = ">=3.7"
 license = {text = "Apache-2.0"}
 dependencies = [
-    # also, pl_itn, but the version is TBD
+    "pl_itn==0.1.0rc1",
     "fastapi>=0.95.0",
     "uvicorn>=0.22.0",
     "prometheus-fastapi-instrumentator>=6.0.0",

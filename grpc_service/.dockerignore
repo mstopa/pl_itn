@@ -1,4 +1,4 @@
 *
 !pl_itn_service
 !pl_itn_api
-!setup.py
+!pyproject.toml

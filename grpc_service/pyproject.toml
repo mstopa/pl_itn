@@ -8,11 +8,11 @@ authors = [
     {name = "mstopa"},
     {name = "cansubmarinesswim"}
 ]
-version = "0.1.0-rc0"
+version = "0.1.0-rc1"
 requires-python = ">=3.7"
 license = {text = "Apache-2.0"}
 dependencies = [
-    # also, pl_itn, but the version is TBD
+    "pl_itn==0.1.0rc1",
     "grpcio>=1.48.0",
     "grpcio-status>=1.48.0",
     "protobuf>=4.21.0",
