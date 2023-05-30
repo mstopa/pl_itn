@@ -29,13 +29,13 @@ jobs:
         name: Build grpc service image
         uses: docker/build-push-action@v4
         with:
-          context: grpc_service
+          context: ./grpc_service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pl-itn-grpc-service:latest
       -
         name: Build restful service image
         uses: docker/build-push-action@v4
         with:
-          context: restful_service
+          context: ./restful_service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pl-itn-rest-service:latest
