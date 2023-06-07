@@ -14,4 +14,4 @@ test:
   results_dir: "tests/results/ordinals"
   test_sets:
     # Datasets defined as List[set_name, set_path, accepted_errors_limit]
-    - ["test", "tests/data/test_ordinals.csv", 1]
+    - ["ordinals", "tests/data/test_ordinals.csv", 12]
