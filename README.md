@@ -124,7 +124,7 @@ docker run --rm -it pl-itn --help
 gRPC service methods are described in `grpc_service/pl_itn_api/api.proto` file. Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
 Service within container serves on port 10010.
 
-Example of building the image and starting the service.
+Example of starting the service.
 ```bash
 docker run -p 10010:10010 pl-itn-grpc-service
 ```
