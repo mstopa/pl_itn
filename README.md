@@ -16,6 +16,7 @@ This project is an implementation of [NeMo Inverse Text Normalization](https://a
 [Docker](#docker)\
 [Usage](#usage)\
 [gRPC service](#grpc-service)\
+[restful fastAPI service](#restful-fastapi-service)\
 [Building custom grammars](#building-custom-grammars)\
 [Documentation](#documentation)\
 [Contributing](#contributing)\
@@ -47,12 +48,33 @@ pip install -e .[dev]
 
 ### Docker
 
-To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.\
-To build docker image with gRPC service use `grpc_service.dockerfile` file.
+To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.
 
 ```bash
 docker build -t <IMAGE:TAG> -f <DOCKERFILE> .
 ```
+
+To build a gRPC service or a restful service for this project, you will need to use the Dockerfiles located in their respective directories. 
+
+ - `grpc_service/`: Contains the Dockerfile and any additional files required to build and run the gRPC service.
+ - `restful_service/`: Contains the Dockerfile and any additional files required to build and run the REST service.
+
+To build the gRPC service, navigate to the `grpc_service/` directory and use the provided Dockerfile:
+
+```bash
+cd grpc_service/
+docker build -t pl-itn-grpc-service .
+```
+
+Similarly, to build the REST service, navigate to the `restful_service/` directory and use the corresponding Dockerfile:
+
+```bash
+cd grpc_service/
+docker build -t pl-itn-rest-service .
+```
+
+Official images are available in [dockerhub](https://hub.docker.com/repository/docker/cansubmarinesswim/)
+
 
 ## Usage
 ### Console app
@@ -106,6 +128,11 @@ Example of building the image and starting the service.
 docker build -t pl_itn_service:test -f grpc_service.dockerfile .
 docker run -p 10010:10010 pl_itn_service:test
 ```
+
+## restful fastAPI Service
+
+Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
+Restful fastAPI service methods are described under  
 
 ## Building custom grammars
 Custom grammars can be built using `build_grammar/build_grammar.py` script.
