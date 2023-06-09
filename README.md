@@ -6,29 +6,25 @@ one two three -> 1 2 3
 
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 
-`pl_itn` is an opensource Polish ITN Python library and REST API for practical applications.
+`pl_itn` is an opensource Polish ITN project consisted of:
+- `pl_itn` Python library
+- `build_grammar` module
+- RESTful API
+- gRPC API
 
 This project is an implementation of [NeMo Inverse Text Normalization](https://arxiv.org/abs/2104.05055) for Polish.
 
 ## Table of contents
-[Prerequisites](#prerequisites)\
 [Setup](#setup)\
 [Docker](#docker)\
 [Usage](#usage)\
 [gRPC service](#grpc-service)\
+[RESTful fastAPI service](#restful-fastapi-service)\
 [Building custom grammars](#building-custom-grammars)\
-[Documentation](#documentation)\
-[Contributing](#contributing)\
-[License](#License)\
 [References](#References)
 
-## Prerequisites
-For [pynini](https://pypi.org/project/pynini/)
-- A standards-compliant C++17 compiler (GCC >= 7 or Clang >= 700)
-- The compatible recent version of OpenFst built with the grm extensions (see `deps/install_openfst.md`)
 
 ## Setup
-Make sure to first install prerequisites, especially OpenFST.
 
 ### Install from PyPI
 ```bash
@@ -36,23 +32,50 @@ pip install pl_itn
 ```
 
 ### Build from source
+**Prerequisites:**\
+For [pynini](https://pypi.org/project/pynini/)
+- A standards-compliant C++17 compiler (GCC >= 7 or Clang >= 700)
+- The compatible recent version of OpenFst built with the grm extensions (see `deps/install_openfst.md`)
+
+**Installation:**
 ```bash
 pip install .
 ```
 
-### Editable install for development
+**Editable install for development:**
 ```bash
 pip install -e .[dev]
 ```
 
 ### Docker
 
-To build docker image containing pl_itn library use `pl_itn_lib.dockerfile` file.\
-To build docker image with gRPC service use `grpc_service.dockerfile` file.
+To build docker image containing `pl_itn` library use `Dockerfile`:
 
 ```bash
-docker build -t <IMAGE:TAG> -f <DOCKERFILE> .
+docker build -t pl-itn .
 ```
+
+To build a gRPC service or a restful service for this project, you will need to use the dockerfiles located in their respective directories. 
+
+ - `grpc_service/`: Contains the Dockerfile and any additional files required to build and run the gRPC service.
+ - `restful_service/`: Contains the Dockerfile and any additional files required to build and run the REST service.
+
+To build the gRPC service, navigate to the `grpc_service/` directory and use the provided Dockerfile:
+
+```bash
+cd grpc_service/
+docker build -t pl-itn-grpc-service .
+```
+
+Similarly, to build the REST service, navigate to the `restful_service/` directory and use the corresponding Dockerfile:
+
+```bash
+cd restful_service/
+docker build -t pl-itn-rest-service .
+```
+
+Official pl-itn images are available in [dockerhub](https://hub.docker.com/u/cansubmarinesswim).
+
 
 ## Usage
 ### Console app
@@ -93,7 +116,7 @@ pl_itn -t "drugi listopada dwa tysiące osiemnastego roku"
 
 Existing docker image containing pl_itn library is required. For build command refer to [Docker](#docker) section.
 ```bash
-docker run --rm -it <IMAGE:TAG> --help
+docker run --rm -it pl-itn --help
 ```
 
 ## gRPC Service
@@ -101,10 +124,17 @@ docker run --rm -it <IMAGE:TAG> --help
 gRPC service methods are described in `grpc_service/pl_itn_api/api.proto` file. Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
 Service within container serves on port 10010.
 
-Example of building the image and starting the service.
+Example of starting the service.
 ```bash
-docker build -t pl_itn_service:test -f grpc_service.dockerfile .
-docker run -p 10010:10010 pl_itn_service:test
+docker run -p 10010:10010 pl-itn-grpc-service
+```
+
+## RESTful fastAPI Service
+
+Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
+To access detailed information about the REST API endpoints, you can refer to the `/openapi.json` endpoint when running the service.
+```bash
+docker run -p 8000:8000 pl-itn-rest-service
 ```
 
 ## Building custom grammars
@@ -162,14 +192,6 @@ $ pl_itn \
 1 trzech piąta
 ```
 
-See [Documentation](#documentation) for more details.
-
-## Documentation
-
-## Contributing
-
-## License
-
-## Rerences
+## References
 - K. Gorman. 2016. Pynini: A Python library for weighted finite-state grammar compilation. In Proc. ACL Workshop on Statistical NLP and Weighted Automata, 75-80.
 - Y. Zhang, E. Bakhturina, K. Gorman, and B. Ginsburg. 2021. NeMo Inverse Text Normalization: From Development To Production.
