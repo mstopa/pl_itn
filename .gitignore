@@ -1,6 +1,7 @@
 # Custom
 .pdm.toml
-todo
+**/logs/*
+tests/results/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
