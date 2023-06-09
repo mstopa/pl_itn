@@ -73,7 +73,7 @@ cd grpc_service/
 docker build -t pl-itn-rest-service .
 ```
 
-Official images are available in [dockerhub](https://hub.docker.com/repository/docker/cansubmarinesswim/)
+Official pl-itn images are available in [dockerhub](https://hub.docker.com/repository/docker/cansubmarinesswim/).
 
 
 ## Usage
@@ -132,7 +132,7 @@ docker run -p 10010:10010 pl_itn_service:test
 ## restful fastAPI Service
 
 Docker container is suggested approach for running the service. For build command refer to [Docker](#docker) section.
-Restful fastAPI service methods are described under  
+To access detailed information about the REST API endpoints, you can refer to the `/openapi.json` endpoint when running the service. 
 
 ## Building custom grammars
 Custom grammars can be built using `build_grammar/build_grammar.py` script.
