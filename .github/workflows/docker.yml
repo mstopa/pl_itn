@@ -42,3 +42,10 @@ jobs:
           context: ./restful_service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pl-itn-rest-service:latest
+      -
+        name: Build pl_itn library
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pl-itn:latest

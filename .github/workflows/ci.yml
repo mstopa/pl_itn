@@ -24,28 +24,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install '.[test]'
-
-
-    # - uses: pdm-project/setup-pdm@v3
-    #   name: Setup PDM
-    #   with:
-    #     python-version: "3.10"  # Version range or exact version of a Python version to use, the same as actions/setup-python
-    #     architecture: x64    # The target architecture (x86, x64) of the Python interpreter. the same as actions/setup-python
-    #     prerelease: false     # Allow prerelease versions to be installed
-    #     cache: true
-    #     cache-dependency-path: '**/pdm.lock'
-    #     enable-pep582: true  # Enable PEP 582 package loading globally
-    # - name: Install dependencies
-    #   run: |
-    #     pdm install
-
-    # - name: Lint with flake8
-    #   run: |
-    #     # stop the build if there are Python syntax errors or undefined names
-    #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-    #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
     - name: Test
       run: |
         python3 tests/test_normalizer.py tests/configs/date.yaml

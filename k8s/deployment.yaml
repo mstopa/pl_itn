@@ -21,9 +21,9 @@ spec:
             type: Directory
       containers:
       - name: pl-itn
-        image: pl_itn:test
+        image: cansubmarinesswim/pl-itn-rest-service:latest
         ports:
-        - containerPort: 10010
+        - containerPort: 8000
         volumeMounts:
           - name: fst-storage
             mountPath: /fst_models

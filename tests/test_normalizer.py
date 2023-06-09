@@ -6,8 +6,10 @@ import pytest
 
 from pl_itn import Normalizer
 
+
 def _get_test_config_files(config_dir: Path = Path(__file__).resolve().parent / "configs"):
     return [config for config in config_dir.glob("*") if config.is_file()]
+
 
 @pytest.mark.parametrize("config_path", _get_test_config_files())
 def test_normalizer(config_path: Path, save_results):
@@ -27,12 +29,16 @@ def test_normalizer(config_path: Path, save_results):
         correct_norm, incorrect_norm = normalize_corpus(test_set_path, normalizer)
 
         if save_results:
-            _save_results_to_file(results_dir, test_set_name, correct_norm, incorrect_norm) 
+            _save_results_to_file(results_dir, test_set_name, correct_norm, incorrect_norm)
 
-        assert len(incorrect_norm) <= accepted_errors_threshold, f"Number of wrong normalizations for \"{test_set_name}\" ({len(incorrect_norm)}) is higher than its threshold ({accepted_errors_threshold})."
+        assert (
+            len(incorrect_norm) <= accepted_errors_threshold
+        ), f'Number of wrong normalizations for "{test_set_name}" ({len(incorrect_norm)}) is higher than its threshold ({accepted_errors_threshold}).'
 
 
-def _save_results_to_file(results_dir: Path, results_file_name: str, correct_norm: list[str], incorrect_norm: list[str]):
+def _save_results_to_file(
+    results_dir: Path, results_file_name: str, correct_norm: list[str], incorrect_norm: list[str]
+):
     results_fpath = results_dir / f"{results_file_name}.txt"
     correct_lines = "\n".join(correct_norm)
     incorrect_lines = "\n".join(incorrect_norm)
@@ -44,6 +50,7 @@ def _save_results_to_file(results_dir: Path, results_file_name: str, correct_nor
         f.write(f"{incorrect_lines}\n\n")
         f.write(f"Correct predictions: {len(correct_lines)}\n")
         f.write(f"Incorrect predictions: {len(incorrect_lines)}")
+
 
 def normalize_corpus(test_set_path: str, normalizer: object) -> bool:
 
@@ -59,8 +66,9 @@ def normalize_corpus(test_set_path: str, normalizer: object) -> bool:
             correct.append(message)
         else:
             incorrect.append(message)
-    
+
     return correct, incorrect
+
 
 def load_data(input_fpath: Path):
     assert input_fpath.suffix == ".csv", "Incorrect input file extension!"

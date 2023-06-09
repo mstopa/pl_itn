@@ -66,7 +66,7 @@ async def normalize(request: NormalizeRequest):
             detail=e.message,
         )
     except Exception as e:
-        print(e.with_traceback())
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unknown Error."
         )
@@ -90,7 +90,7 @@ def get_normalizer_settings():
         return {"tagger": tagger, "verbalizer": verbalizer}
 
     except Exception as e:
-        print(e.with_traceback())
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unknown Error."
         )
@@ -113,7 +113,7 @@ def list_tagger_fst():
             detail=e.message,
         )
     except Exception as e:
-        print(e.with_traceback())
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unknown Error."
         )
@@ -138,13 +138,13 @@ def list_verbalizer_fst():
             detail=e.message,
         )
     except Exception as e:
-        print(e.with_traceback())
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unknown Error."
         )
 
 
-@app.post("/normalizer/fst")
+@app.post("/normalizer/fst", status_code=status.HTTP_200_OK)
 def set_fst(request: FstDetails):
     try:
         fst_name = request.name
@@ -154,11 +154,10 @@ def set_fst(request: FstDetails):
             else GrammarType.TAGGER
         )
 
-        print(grammar_type)
         fst_path, description = grammar_loader.get_specified_fst(fst_name, grammar_type)
         normalizer.set_grammar(fst_path, grammar_type, description)
 
-        return {}
+        return {"message": "Success"}
 
     except GrammarLoaderError as e:
         raise HTTPException(
@@ -166,7 +165,7 @@ def set_fst(request: FstDetails):
             detail=e.message,
         )
     except Exception as e:
-        print(e.with_traceback())
+        logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unknown Error."
         )
