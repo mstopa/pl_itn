@@ -35,6 +35,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install '.[test]'
     - name: Test
-      run: |
-        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.grammar_config }}"
+      run: >
+        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.grammar_config }}" && \
         pytest tests --config "tests/configs/${{ matrix.grammar_config }}"
