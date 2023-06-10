@@ -14,6 +14,18 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        grammar_config:
+        - "cardinals_basic_forms.yaml"
+        - "cardinals_declined.yaml"
+        - "ordinals.yaml"
+        - "time.yaml"
+        - "date.yaml"
+        - "empty_grammar.yaml"
+        - "full_normalizations.yaml"
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -26,4 +38,5 @@ jobs:
         pip install '.[test]'
     - name: Test
       run: |
-        python3 tests/test_normalizer.py tests/configs/date.yaml
+        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.grammar_config }}"
+        python3 tests/test_normalizer.py "tests/configs/${{ matrix.grammar_config }}"
