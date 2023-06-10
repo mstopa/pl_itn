@@ -24,7 +24,7 @@ jobs:
         - "time.yaml"
         - "date.yaml"
         - "empty_grammar.yaml"
-        - "full_normalizations.yaml"
+        - "full_normalization.yaml"
 
     steps:
     - uses: actions/checkout@v3
