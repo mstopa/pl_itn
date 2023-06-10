@@ -1,8 +1,10 @@
+from pathlib import Path
+
 import pytest
 
-def pytest_addoption(parser, autouse=True):
-    parser.addoption("--save-results", action="store_true", help="Save test results.")
+def pytest_addoption(parser):
+    parser.addoption("--config", type=Path, required=True, help="Path to config file.")
 
-@pytest.fixture(scope='session', autouse=True)
-def save_results(request):
-    return request.config.getoption("--save-results")
+@pytest.fixture()
+def config_path(pytestconfig):
+    return Path(pytestconfig.getoption("--config"))

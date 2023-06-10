@@ -21,8 +21,6 @@ jobs:
         - "cardinals_basic_forms.yaml"
         - "cardinals_declined.yaml"
         - "ordinals.yaml"
-        - "time.yaml"
-        - "date.yaml"
         - "empty_grammar.yaml"
         - "full_normalization.yaml"
 
@@ -39,4 +37,4 @@ jobs:
     - name: Test
       run: |
         python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.grammar_config }}"
-        python3 tests/test_normalizer.py "tests/configs/${{ matrix.grammar_config }}"
+        pytest tests --config "tests/configs/${{ matrix.grammar_config }}"

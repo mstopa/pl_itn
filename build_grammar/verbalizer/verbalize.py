@@ -24,10 +24,8 @@ class VerbalizeFst(GraphFst):
 
         graph = whitelist.fst | idle.fst
 
-        if config.get("cardinals_basic_forms") or config.get("cardinals_declined"):
-            graph |= cardinal.fst
-        if config.get("ordinals"):
-            graph |= ordinal.fst
+        graph |= cardinal.fst
+        graph |= ordinal.fst
 
         transformation = (
             lstrip_class_label("tokens")
