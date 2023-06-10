@@ -17,12 +17,12 @@ jobs:
 
     strategy:
       matrix:
-        grammar_config:
-        - "cardinals_basic_forms.yaml"
-        - "cardinals_declined.yaml"
-        - "ordinals.yaml"
-        - "empty_grammar.yaml"
-        - "full_normalization.yaml"
+        case:
+        - "cardinals_basic_forms"
+        - "cardinals_declined"
+        - "ordinals"
+        - "empty_grammar"
+        - "full_normalization"
 
     steps:
     - uses: actions/checkout@v3
@@ -35,6 +35,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install '.[test]'
     - name: Test
-      run: >
-        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.grammar_config }}" &&
-        pytest tests --config "tests/configs/${{ matrix.grammar_config }}"
+      run: |
+        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.case }}.yaml" -g "${{ matrix.case }}"
+        pytest tests --config "tests/configs/${{ matrix.case }}.yaml" --grammars "${{ matrix.case }}"

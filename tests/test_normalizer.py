@@ -33,9 +33,9 @@ def normalize_corpus(test_set_path: str, normalizer: object) -> bool:
     return correct, incorrect
 
 
-def test_normalizer(config_path: Path):
+def test_normalizer(config_path: Path, grammars_dir: Path):
 
-    normalizer = Normalizer()
+    normalizer = Normalizer(tagger_fst_path=(grammars_dir / "tagger.fst"), verbalizer_fst_path=(grammars_dir / "verbalizer.fst"))
 
     with config_path.open() as f:
         config = yaml.safe_load(f)
