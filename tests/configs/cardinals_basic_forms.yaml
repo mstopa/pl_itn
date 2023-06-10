@@ -1,17 +1,7 @@
-out_dir: "grammars/cardinals_basic"
-tagger_fname: "tagger.fst"    # ${out_dir}/${tagger_fname} will be used to store a grammar
-verbalizer_fname: "verbalizer.fst"
+cardinals_basic_forms: True   # (jeden|dwa|trzy|...), like in phone numbers
+cardinals_declined: False     # (jedni|dwóm|trzema|czterech|...) cardinal numerals declined by cases and gender
+ordinals: False               # (pierwszy|druga|trzecie) ordinal numerals declined by number, case and gender
 
-fst_normalization_config:
-  cardinals_basic_forms: True  # (jeden|dwa|trzy|...), like in phone numbers
-  cardinals_declined: False    # (jedni|dwóm|trzema|czterech|...) cardinal numerals declined by cases and gender
-  ordinals: False              # (pierwszy|druga|trzecie) ordinal numerals declined by number, case and gender
-  time: False                  # (pierwsza piętnaście|za pięć druga)
-  date: False                  # (trzeci listopada|dwunasty lipca)
-
-test:
-  # Where to store test results
-  results_dir: "tests/results/cardinals_basic"
-  test_sets:
-    # Datasets defined as List[set_name, set_path, accepted_errors_limit]
-    - ["test_cardinals_basic", "tests/data/test_cardinals_basic.csv", 12]
+test_sets:
+  # Datasets defined as List[set_name, set_path, accepted_errors_limit]
+  - ["test_cardinals_basic", "tests/data/test_cardinals_basic.csv", 0]

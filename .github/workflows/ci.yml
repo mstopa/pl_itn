@@ -14,6 +14,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        case:
+        - "cardinals_basic_forms"
+        - "cardinals_declined"
+        - "ordinals"
+        - "empty_grammar"
+        - "full_normalization"
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -26,4 +36,5 @@ jobs:
         pip install '.[test]'
     - name: Test
       run: |
-        python3 tests/test_normalizer.py tests/configs/date.yaml
+        python3 build_grammar/build_grammar.py -c "tests/configs/${{ matrix.case }}.yaml" -g "${{ matrix.case }}"
+        pytest tests --config "tests/configs/${{ matrix.case }}.yaml" --grammars "${{ matrix.case }}"
