@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: prometheus-scaledobject
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: pl-itn-deployment
+  pollingInterval: 5
+  cooldownPeriod: 30
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://10.111.134.225:9090
+      metricName: http_requests_total
+      threshold: '10'
+      query: sum(rate(http_requests_total{service="pl-itn-service"}[2m]))
